@@ -1,0 +1,10 @@
+{% macro header(title, card_class, content_tag) %}
+<div class="card {{ card_class | default('') }}">
+	<h3 class="title">{{ title }}</h3>
+	<{{ content_tag | default('div') }} class="content">
+{% endmacro %}
+
+{% macro footer(content_tag) %}
+	</{{ content_tag | default('div') }}>
+</div>
+{% endmacro %}

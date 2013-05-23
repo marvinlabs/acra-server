@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html"; charset=utf-8" />
+        <title>{% block title %}Home{% endblock %} | Acra Server</title>
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        
+        {% stylesheets 	filter='cssrewrite' 
+        		'bundles/mlabsacraserver/stylesheets/*' %}
+            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+        {% endstylesheets %}
+        
+        {% javascripts 	'bundles/mlabsacraserver/js/jquery.min.js'
+        				'bundles/mlabsacraserver/js/*' %}
+    		<script type="text/javascript" src="{{ asset_url }}"></script>
+		{% endjavascripts %}
+        <link rel="shortcut icon" href="{{ asset('bundles/mlabsacraserver/images/favicon.ico') }}" />
+    </head>
+    <body>
+        <section id="wrapper">
+            <header id="main-header">
+                <nav class="main-navigation">
+            		{% block navigation %}
+            		{% endblock %}
+                </nav>
+            </header>
+
+            <div id="main-content">                
+                {% block main %}{% endblock %}
+            </div>
+
+            <footer id="main-footer">
+                {% block footer %}
+                    Acra Server by <a href="http://www.marvinlabs.com">MarvinLabs</a>
+                {% endblock %}
+            </footer>
+        </section>
+    
+	    <script type="text/javascript">
+	    {% block javascripts %}{% endblock %}
+	    </script>
+    </body>
+</html>

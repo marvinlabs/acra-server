@@ -1,0 +1,230 @@
+$primary-color: #dd4b39;
+$secondary-color: #3366cc;
+$body-text-color: #999;
+$heading-text-color: #333;
+$light-bg-color: #f1f1f1;
+$medium-bg-color: #e6e6e6;
+$border-color: #d8d8d8;
+$shadow-color: rgba(0, 0, 0, 0.20);
+
+$padding: flex-gutter() / 2;
+
+/************************************************************************************ */
+/** LAYOUT */
+
+#wrapper {
+	@include outer-container;
+}
+
+#main-header, #main-footer, #main-content {
+	@include span-columns(12);
+	@include row();
+	@include clearfix();
+}
+.card-container {
+	@include span-columns(12);
+	@include row();
+}
+
+/************************************************************************************ */
+/** GLOBAL */
+
+body {
+	color: $body-text-color;
+}
+
+h1, h2, h3, h4, h5, h6, th {
+	@include condensed-font(400);
+	color: $heading-text-color;
+	text-transform: uppercase;
+}
+
+a {
+	color: $primary-color;
+	text-decoration: none;
+	&:hover {
+		text-decoration: underline;
+	}
+	&:visited {
+		color: #666;
+	}
+}
+	
+table {
+	width: 100%;
+	
+	thead, tfoot {
+	}
+	
+	td, th {
+		padding: $padding;
+		text-align: left;
+	}
+	
+	th {
+		@include sans-font(400);
+		text-transform: uppercase;
+	}
+	
+	tr {
+		border-bottom: 1px solid $border-color; 
+		&:hover {	
+			color: $heading-text-color;
+			background: tint($primary-color, 95%);
+		}
+	}
+	
+	thead, tfoot {
+		tr:hover {
+			background: none;
+		}
+	}
+	
+	tfoot {
+		display: none;
+	}
+}
+
+.button {
+	@include flat-button();
+}
+
+.primary-button {
+	@include flat-button($primary-color);
+}
+
+.secondary-button {
+	@extend button;
+	@include flat-button($secondary-color);
+}
+
+/************************************************************************************ */
+/** CARDS */
+
+.card-container {
+	background: $medium-bg-color;
+}
+
+.card {
+	/* We don't use neat columns because of masonry */
+	float: left;
+	width: 45%;
+	margin: 1% 0.9% 1% 1%;
+	padding: 1% 1%;
+	
+	background: white;
+	
+	@include sans-font(300);
+	
+	-webkit-border-radius: 2px;
+		    border-radius: 2px;
+	
+	-webkit-box-shadow:  0px 2px 4px 0px $shadow-color;
+	        box-shadow:  0px 2px 4px 0px $shadow-color;
+	        
+	border: 1px solid $border-color;
+	
+	strong {
+		color: #666;
+		@include sans-font(400);
+	}
+	
+	pre {
+		@include monospace-font(300);
+	}
+} 
+
+/************************************************************************************ */
+/** PAGINATION */
+
+div.pagination {
+	margin: 2em;
+	text-align: right;
+	
+	a {
+		display: inline-block;
+		padding: 4px 8px;
+		
+		-webkit-border-radius: 2px;
+			    border-radius: 2px;
+		    
+		&:hover {
+			background: $light-bg-color;
+			text-decoration: none;
+		} 
+	}
+	
+	a.active, a.active:hover, a.active:visited {
+		color: $primary-color;
+		background: transparent;
+		text-decoration: none;
+	}
+}
+
+/************************************************************************************ */
+/** HEADER */
+
+#main-header {
+	background: $light-bg-color;
+	@include pad(0 default);
+	
+	hgroup {
+	}
+	nav.main-navigation, nav.breadcrumb {
+		ul {
+			@include clearfix();
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+		li {
+			float: left;
+		}
+	}
+	nav.main-navigation {
+		padding: 2em 0;
+	}
+}
+
+/************************************************************************************ */
+/** FOOTER */
+
+#main-footer {
+	@include pad(default);
+  	text-align: center;
+  	font-size: 0.9em;
+}
+	
+/************************************************************************************ */
+/** GENERAL CONTENT */
+
+#main-content {		
+}
+	
+/************************************************************************************ */
+/** CRASH LIST */
+.crash-list {
+	@include pad(default);
+	background: white;
+	
+	table td.action-link {
+		text-align: right;
+	}
+}
+	
+/************************************************************************************ */
+/** CRASH DETAILS */
+.crash-details {
+	@include pad(default);
+	.card ul.content {
+		margin: 1em 0;
+		padding: 0;
+		list-style-type: none;
+		
+		.field .label {
+			display: inline-block;
+			min-width: 25%;
+		}
+	}
+}
+	

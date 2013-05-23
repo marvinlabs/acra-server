@@ -1,0 +1,53 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300|Roboto+Slab:400,700,300|Roboto:400,700,300,400italic);
+
+@mixin serif-font($weight: 400, $style: normal) {
+	font-family: 'Roboto Slab', serif;
+	font-weight: $weight;
+	font-style: $style;
+}
+
+@mixin sans-font($weight: 400, $style: normal) {
+	font-family: 'Roboto', helvetica, arial, sans-serif;
+	font-weight: $weight;
+	font-style: $style;
+}
+
+@mixin condensed-font($weight: 400, $style: normal) {
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: $weight;
+	font-style: $style;
+}
+
+@mixin monospace-font($weight: 400, $style: normal) {
+	font-family: 'consolas', monospace, serif;
+	font-weight: $weight;
+	font-style: $style;
+}
+
+@mixin flat-button($bg-color: #666, $text-color: white, $shade-intensity: 20%, $padding: 8px 14px) {
+  	display: inline-block !important; /* needed for anchors */
+  	position: relative;
+  	padding: $padding;
+  		
+  	border: 0;
+  	background: $bg-color;
+  	color: $text-color !important;
+  	font-weight: 700;
+  	text-decoration: none;
+  
+	box-shadow: 0px 4px shade($bg-color, $shade-intensity);
+              	
+	&:hover, &:focus, &.hover, &.focus {
+  		color: $text-color !important;
+    	text-decoration: none !important; 
+    	@include transform(translate(0px, 2px));
+    	box-shadow: 0px 2px shade($bg-color, $shade-intensity);
+  	}
+  	
+  	&:active, &.active {
+  		color: $text-color !important;
+    	text-decoration: none !important;
+    	@include transform(translate(0px, 6px));
+    	box-shadow: 0px -2px shade($bg-color, $shade-intensity);
+  	}
+}

@@ -1,0 +1,17 @@
+_crash_add:
+    pattern:  /crash/add
+    defaults: { _controller: MLabsAcraServerBundle:Crash:add }
+    methods:  [POST]
+
+_crash_list:
+    pattern:  /crash/list
+    defaults: { _controller: MLabsAcraServerBundle:Crash:list }
+    methods:  [GET]
+
+_crash_details:
+    pattern:  /crash/details/{id}
+    defaults: { _controller: MLabsAcraServerBundle:Crash:details }
+    methods:  [GET]
+    requirements:
+        id: \d+
+

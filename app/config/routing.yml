@@ -1,0 +1,4 @@
+MLabsAcraServerBundle:
+    resource: "@MLabsAcraServerBundle/Resources/config/routing.yml"
+    prefix:   /
+

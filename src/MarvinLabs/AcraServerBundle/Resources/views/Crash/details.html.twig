@@ -1,0 +1,93 @@
+{% extends 'MLabsAcraServerBundle::layout.html.twig' %}
+
+{% import 'MLabsAcraServerBundle::cards.html.twig' as cards %}
+{% import _self as fields %}
+
+
+{% macro echo(title, value, test, value_wrapper, outer_tag) %}
+	{% if test | default(value) %}	
+		<{{ outer_tag | default('li') }} class="field">
+			<strong class="label">{{ title }}</strong>: <{{value_wrapper | default('span')}} class="value">{{ value }}</{{value_wrapper | default('span')}}>
+		</{{ outer_tag | default('li') }}>
+	{% endif %}	
+{% endmacro %}
+
+
+{% block main %}
+<section class="card-container crash-details">
+
+	{{ cards.header('General', 'general', 'ul') }}
+		{{ fields.echo('Submitted', "#{crash.createdAt | date('Y-m-d H:i:s')} (UTC)", crash.createdAt) }}
+		{{ fields.echo('Status', crash.statusAsString) }}
+		{{ fields.echo('User comment', crash.userComment) }}
+		{{ fields.echo('User email', crash.userEmail) }}
+	{{ cards.footer('ul') }}
+
+	{{ cards.header('App', 'app', 'ul') }}
+		{{ fields.echo('Package', crash.packageName) }}
+		{{ fields.echo('Version', "#{ crash.appVersionName } ~ #{ crash.appVersionCode }", crash.appVersionName) }}
+		{{ fields.echo('File path', crash.filePath) }}
+		{{ fields.echo('App start', crash.userAppStartDate) }}
+		{{ fields.echo('App crash', crash.userCrashDate) }}
+	{{ cards.footer('ul') }}
+	
+	{{ cards.header('Stacktrace', 'stacktrace', 'ul') }}
+		{{ fields.echo('Summary', crash.shortStackTrace, crash.shortStackTrace, 'pre') }}
+		{{ fields.echo('Full', crash.stackTrace, crash.stackTrace, 'pre') }}
+	{{ cards.footer('ul') }}
+	
+	{{ cards.header('Device', 'device', 'ul') }}
+		{{ fields.echo('Model', "#{ crash.brand }, #{ crash.phoneModel }", crash.brand) }}
+		{{ fields.echo('Product code', crash.product) }}
+		{{ fields.echo('Total memory', crash.totalMemSize | bfos_format_bytes, crash.totalMemSize) }}
+		{{ fields.echo('Available memory', crash.availableMemSize | bfos_format_bytes, crash.availableMemSize) }}
+		{{ fields.echo('Display', crash.display, crash.display, 'pre') }}
+		{{ fields.echo('Features', crash.deviceFeatures, crash.deviceFeatures, 'pre') }}
+		{{ fields.echo('Device ID', crash.deviceId, crash.deviceId, 'pre') }}
+	{{ cards.footer('ul') }}
+	
+	{{ cards.header('Android', 'android', 'ul') }}
+		{{ fields.echo('Version', crash.androidVersion) }}
+		{{ fields.echo('Build details', crash.build, crash.build, 'pre') }}
+	{{ cards.footer('ul') }}
+	
+	{{ cards.header('Settings', 'settings', 'ul') }}
+		{{ fields.echo('Global', crash.settingsGlobal, crash.settingsGlobal, 'pre') }}
+		{{ fields.echo('System', crash.settingsSystem, crash.settingsSystem, 'pre') }}
+		{{ fields.echo('Secure', crash.settingsSecure, crash.settingsSecure, 'pre') }}
+	{{ cards.footer('ul') }}
+	
+	{{ cards.header('Other', 'settings', 'ul') }}
+		{{ fields.echo('customData', crash.customData, crash.customData, 'pre') }}
+		{{ fields.echo('initialConfiguration', crash.initialConfiguration, crash.initialConfiguration, 'pre') }}
+		{{ fields.echo('crashConfiguration', crash.crashConfiguration, crash.crashConfiguration, 'pre') }}
+		{{ fields.echo('dumpsysMeminfo', crash.dumpsysMeminfo, crash.dumpsysMeminfo, 'pre') }}
+		{{ fields.echo('dropbox', crash.dropbox, crash.dropbox, 'pre') }}
+		{{ fields.echo('isSilent', crash.isSilent, crash.isSilent, 'pre') }}
+		{{ fields.echo('installationId', crash.installationId, crash.installationId, 'pre') }}
+		{{ fields.echo('environment', crash.environment, crash.environment, 'pre') }}
+		{{ fields.echo('sharedPreferences', crash.sharedPreferences, crash.sharedPreferences, 'pre') }}
+		{{ fields.echo('mediaCodecList', crash.mediaCodecList, crash.mediaCodecList, 'pre') }}
+		{{ fields.echo('threadDetails', crash.threadDetails, crash.threadDetails, 'pre') }}
+	{{ cards.footer('ul') }}
+	
+	{{ cards.header('Logs', 'settings', 'ul') }}
+		{{ fields.echo('logcat', crash.logcat, crash.logcat, 'pre') }}
+		{{ fields.echo('eventslog', crash.eventslog, crash.eventslog, 'pre') }}
+		{{ fields.echo('radiolog', crash.radiolog, crash.radiolog, 'pre') }}
+		{{ fields.echo('applicationLog', crash.applicationLog, crash.applicationLog, 'pre') }}
+	{{ cards.footer('ul') }}
+	
+</section>
+    
+{% endblock %}
+
+{% block javascripts %}
+	$('.card-container').masonry({
+			itemSelector: '.card',	
+	  		columnWidth: function( containerWidth ) {
+	    		return containerWidth / 2;
+	  		}
+		});
+{% endblock %}
+

@@ -1,0 +1,12 @@
+Hey,
+
+There is a new crash for your application {{ crash.packageName }}
+
+Link
+--
+{{ url('_crash_details', {'id': crash.id}) }}
+
+Stacktrace:
+--
+{{ crash.shortStackTrace }}
+
