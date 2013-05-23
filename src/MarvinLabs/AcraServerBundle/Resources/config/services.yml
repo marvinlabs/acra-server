@@ -1,7 +1,9 @@
 parameters:
-#    m_labs_as_web_service.example.class: MarvinLabs\AcraServerBundle\Example
+    m_labs_acra_server.table_prefix: as_
 
 services:
-#    m_labs_as_web_service.example:
-#        class: %m_labs_as_web_service.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    m_labs_acra_server.table_prefix_subscriber:
+        class: MarvinLabs\AcraServerBundle\Subscriber\TablePrefixSubscriber
+        arguments: [%m_labs_acra_server.table_prefix%]
+        tags:
+            - { name: doctrine.event_subscriber }

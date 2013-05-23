@@ -8,6 +8,9 @@ parameters:
     database_password: null
     database_path: null
     
+    # DB TABLE PREFIX
+    m_labs_acra_server.table_prefix: as_
+    
     # SWIFT MAILER
     mailer_transport: mail
     mailer_host: 127.0.0.1
