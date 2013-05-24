@@ -3,19 +3,23 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html"; charset=utf-8" />
         <title>{% block title %}Home{% endblock %} | Acra Server</title>
-        <!--[if lt IE 9]>
-            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
         
         {% stylesheets 	filter='cssrewrite' 
         		'bundles/mlabsacraserver/stylesheets/*' %}
             <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
         {% endstylesheets %}
         
+        <!--[if lt IE 9]>       
+        {% javascripts 	'bundles/mlabsacraserver/js-ie/*' %}
+    		<script type="text/javascript" src="{{ asset_url }}"></script>
+		{% endjavascripts %}
+        <![endif]-->
+        
         {% javascripts 	'bundles/mlabsacraserver/js/jquery.min.js'
         				'bundles/mlabsacraserver/js/*' %}
     		<script type="text/javascript" src="{{ asset_url }}"></script>
 		{% endjavascripts %}
+		
         <link rel="shortcut icon" href="{{ asset('bundles/mlabsacraserver/images/favicon.ico') }}" />
     </head>
     <body>
