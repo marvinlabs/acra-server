@@ -25,6 +25,17 @@ $padding: flex-gutter() / 2;
 	@include span-columns(12);
 	@include row();
 }
+.graph-container {
+	@include row();	
+	&.full-width {
+		@include span-columns(12 of 12);
+		@include omega();
+	}
+	&.half-width {
+		@include span-columns(6 of 12);
+		@include omega(2n);
+	}
+}
 
 /************************************************************************************ */
 /** GLOBAL */
@@ -49,6 +60,10 @@ a {
 		color: #666;
 	}
 }
+	
+pre, code {
+	font-size: 0.8em;
+}	
 	
 table {
 	width: 100%;
@@ -98,11 +113,14 @@ table {
 	@include flat-button($secondary-color);
 }
 
+.clear {
+	@include clearfix();	
+}
+
 /************************************************************************************ */
 /** CARDS */
 
 .card-container {
-	background: $medium-bg-color;
 }
 
 .card {
@@ -133,6 +151,86 @@ table {
 		@include monospace-font(300);
 	}
 } 
+
+/************************************************************************************ */
+/** TABS */
+.tab-container {
+	.nav {
+		@include clearfix();
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		border-bottom: 1px solid $border-color;
+		
+		.tab {
+			float: left;
+			padding: 5px 15px 0;
+			font-size: 1.2em;
+			@include condensed-font(400);
+			color: $heading-text-color;
+			text-transform: uppercase;
+			
+			&.first {
+				padding-left: 0;
+			}
+			&.last {
+				padding-right: 0;
+			}
+			
+			a {
+				@include transition(border-color, 0.5s);
+				display: block;
+				padding: 5px 0;
+				margin: 0;
+				border-bottom: 4px solid white;
+				text-decoration: none;
+				color: $heading-text-color;
+				&:hover {
+					color: $heading-text-color;
+					border-bottom: 4px solid shade($border-color, 20%);
+				}
+			}
+			&.ui-state-active a {
+				border-bottom: 4px solid $border-color;
+			}
+		}
+	}
+	.content {
+		padding-top: flex-gutter();
+		padding-bottom: flex-gutter();
+	}
+}
+
+/************************************************************************************ */
+/** GRAPHS */
+.graph-container {	
+	.graph {
+		width: 100%;
+		height: 350px;
+	}
+	
+	.legend {
+		table {
+			width: auto;
+			tr {
+				border: none;
+			}
+			td {
+				padding-bottom: 5px;
+			}
+			td.legendColorBox {
+				padding-right: 10px;
+				padding-bottom: 5px;
+			}
+		}
+	}
+	
+	.title {
+		margin: 2em 0;
+		text-align: center;
+		color: $body-text-color;
+	}
+}
 
 /************************************************************************************ */
 /** PAGINATION */
@@ -199,12 +297,14 @@ div.pagination {
 /** GENERAL CONTENT */
 
 #main-content {		
+	section {
+		@include pad(default);
+	}
 }
 	
 /************************************************************************************ */
 /** CRASH LIST */
 .crash-list {
-	@include pad(default);
 	background: white;
 	
 	table td.action-link {
@@ -214,17 +314,4 @@ div.pagination {
 	
 /************************************************************************************ */
 /** CRASH DETAILS */
-.crash-details {
-	@include pad(default);
-	.card ul.content {
-		margin: 1em 0;
-		padding: 0;
-		list-style-type: none;
-		
-		.field .label {
-			display: inline-block;
-			min-width: 25%;
-		}
-	}
-}
 	
