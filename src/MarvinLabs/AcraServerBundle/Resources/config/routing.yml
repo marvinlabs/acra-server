@@ -15,3 +15,7 @@ _crash_details:
     requirements:
         id: \d+
 
+_crash_test_data:
+    pattern:  /crash/generate_data
+    defaults: { _controller: MLabsAcraServerBundle:Crash:generateTestData }
+    methods:  [GET]

@@ -8,9 +8,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 use MarvinLabs\AcraServerBundle\Entity\Crash;
+use MarvinLabs\AcraServerBundle\DataFixtures\LoadFixtureData;
 
 class CrashController extends Controller
 {
+	public function generateTestDataAction()
+	{	
+  		$doctrine = $this->getDoctrine()->getManager();
+		
+  		$fixtureDataLoader = new LoadFixtureData();
+  		$fixtures = $fixtureDataLoader->load($doctrine);
+
+  		return new Response( var_dump($fixtures) );
+	}
+	
 	public function addAction()
 	{	
     	$crash = $this->newCrashFromRequest($this->getRequest());

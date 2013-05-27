@@ -1,0 +1,43 @@
+MarvinLabs\AcraServerBundle\Entity\Crash:
+    crash{1..1000}:
+        status: <crashStatus()>
+        issueId:
+        reportId: <uuid>
+        appVersionCode: <numberBetween(1, 50)>
+        appVersionName: <appVersion()>
+        packageName: <packageName()>
+        filePath: 
+        phoneModel: <model()>
+        androidVersion: <androidVersion()>
+        build:
+        brand: <brand()>
+        product: <product()>
+        totalMemSize: <randomNumber(30000000, 64000000)>
+        availableMemSize: <randomNumber(1000000, 30000000)>
+        customData:
+        stackTrace: <stackTrace()>
+        initialConfiguration:
+        crashConfiguration:
+        display:
+        userComment:
+        userAppStartDate: <iso8601()>
+        userCrashDate: <iso8601()>
+        dumpsysMeminfo:
+        dropbox:
+        logcat:
+        eventslog:
+        radiolog:
+        isSilent:
+        deviceId:
+        installationId:
+        userEmail:
+        deviceFeatures:
+        environment:
+        settingsGlobal:
+        settingsSystem:
+        settingsSecure:
+        sharedPreferences:
+        mediaCodecList:
+        threadDetails:
+        applicationLog:
+        

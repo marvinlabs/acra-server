@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9a9af26d34e1346df35ce0042bed1eb3",
+    "hash": "fad7377ec2d80df853ad863c6f2d32c6",
     "packages": [
         {
             "name": "brazilianfriendsofsymfony/twig-extensions-bundle",
@@ -324,6 +324,47 @@
             "time": "2013-05-09 21:35:24"
         },
         {
+            "name": "doctrine/data-fixtures",
+            "version": "v1.0.0-ALPHA3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/data-fixtures.git",
+                "reference": "v1.0.0-ALPHA3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/data-fixtures/zipball/v1.0.0-ALPHA3",
+                "reference": "v1.0.0-ALPHA3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\DataFixtures": "lib/"
+                }
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                }
+            ],
+            "description": "Data Fixtures for all Doctrine Object Managers",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "database"
+            ],
+            "time": "2012-09-20 03:26:34"
+        },
+        {
             "name": "doctrine/dbal",
             "version": "2.4.0-BETA2",
             "source": {
@@ -462,6 +503,64 @@
                 "persistence"
             ],
             "time": "2013-03-25 20:13:59"
+        },
+        {
+            "name": "doctrine/doctrine-fixtures-bundle",
+            "version": "dev-master",
+            "target-dir": "Doctrine/Bundle/FixturesBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/DoctrineFixturesBundle.git",
+                "reference": "5696cd636df7cbfaf4d1c45ed2922438968cf890"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/5696cd636df7cbfaf4d1c45ed2922438968cf890",
+                "reference": "5696cd636df7cbfaf4d1c45ed2922438968cf890",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/data-fixtures": "*",
+                "doctrine/doctrine-bundle": ">=1.0,<2.0",
+                "php": ">=5.3.2",
+                "symfony/doctrine-bridge": ">=2.1.0,<2.4-dev"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Bundle\\FixturesBundle": ""
+                }
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Doctrine Project",
+                    "homepage": "http://www.doctrine-project.org"
+                }
+            ],
+            "description": "Symfony DoctrineFixturesBundle",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "Fixture",
+                "persistence"
+            ],
+            "time": "2013-04-27 11:57:35"
         },
         {
             "name": "doctrine/inflector",
@@ -651,6 +750,51 @@
                 "orm"
             ],
             "time": "2013-05-10 21:31:27"
+        },
+        {
+            "name": "fzaninotto/faker",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker",
+                "reference": "v1.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/fzaninotto/Faker/archive/v1.1.0.zip",
+                "reference": "v1.1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Faker": "src/"
+                }
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2012-10-29 02:32:06"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1144,6 +1288,60 @@
                 "psr-3"
             ],
             "time": "2013-04-23 10:09:48"
+        },
+        {
+            "name": "nelmio/alice",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nelmio/alice.git",
+                "reference": "3779183d51994a446b02cebea3ff76cbc800add8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nelmio/alice/zipball/3779183d51994a446b02cebea3ff76cbc800add8",
+                "reference": "3779183d51994a446b02cebea3ff76cbc800add8",
+                "shasum": ""
+            },
+            "require": {
+                "fzaninotto/faker": ">=1.0,<2.0",
+                "php": ">=5.3",
+                "symfony/yaml": ">=2.0,<3.0"
+            },
+            "require-dev": {
+                "doctrine/common": ">=2.3,<3.0",
+                "phpunit/phpunit": "3.7.*",
+                "symfony/property-access": ">=2.2,<3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Nelmio\\Alice\\": "src/"
+                }
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nelmio",
+                    "homepage": "http://nelm.io"
+                }
+            ],
+            "description": "Expressive fixtures generator",
+            "keywords": [
+                "Fixture",
+                "data",
+                "orm",
+                "test"
+            ],
+            "time": "2013-04-26 17:50:30"
         },
         {
             "name": "phpoption/phpoption",
@@ -1803,7 +2001,9 @@
     "minimum-stability": "alpha",
     "stability-flags": {
         "symfony/assetic-bundle": 20,
-        "brazilianfriendsofsymfony/twig-extensions-bundle": 20
+        "doctrine/doctrine-fixtures-bundle": 20,
+        "brazilianfriendsofsymfony/twig-extensions-bundle": 20,
+        "nelmio/alice": 20
     },
     "platform": {
         "php": ">=5.3.3"
