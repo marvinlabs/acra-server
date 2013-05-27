@@ -23,7 +23,8 @@
 		"kriswallsmith/assetic": "1.1.*",
 		
         "brazilianfriendsofsymfony/twig-extensions-bundle": "dev-master",
-		"nelmio/alice": "1.4.x-dev"
+		"nelmio/alice": "1.4.x-dev",
+		"beberlei/DoctrineExtensions": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

@@ -3,8 +3,34 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "fad7377ec2d80df853ad863c6f2d32c6",
+    "hash": "7c7edcc113ceffb5c100c8988e1c6cc1",
     "packages": [
+        {
+            "name": "beberlei/DoctrineExtensions",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beberlei/DoctrineExtensions.git",
+                "reference": "v0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beberlei/DoctrineExtensions/zipball/v0.1",
+                "reference": "v0.1",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DoctrineExtensions": "lib/"
+                }
+            },
+            "notification-url": "http://packagist.org/downloads/",
+            "time": "2012-05-16 07:04:34"
+        },
         {
             "name": "brazilianfriendsofsymfony/twig-extensions-bundle",
             "version": "dev-master",
@@ -2003,7 +2029,8 @@
         "symfony/assetic-bundle": 20,
         "doctrine/doctrine-fixtures-bundle": 20,
         "brazilianfriendsofsymfony/twig-extensions-bundle": 20,
-        "nelmio/alice": 20
+        "nelmio/alice": 20,
+        "beberlei/doctrineextensions": 20
     },
     "platform": {
         "php": ">=5.3.3"

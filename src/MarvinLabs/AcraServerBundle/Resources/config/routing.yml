@@ -15,7 +15,27 @@ _crash_details:
     requirements:
         id: \d+
 
-_crash_test_data:
-    pattern:  /crash/generate_data
-    defaults: { _controller: MLabsAcraServerBundle:Crash:generateTestData }
+_issue_details:
+    pattern:  /issue/{id}
+    defaults: { _controller: MLabsAcraServerBundle:Issue:details }
     methods:  [GET]
+    requirements:
+        id: "[0-9a-fA-F]{32}"
+
+_app_dashboard:
+    pattern:  /app/{packageName}
+    defaults: { _controller: MLabsAcraServerBundle:Issue:appDashboard }
+    methods:  [GET]
+    requirements:
+        id: "[0-9a-fA-F\.]+"
+
+_main_dashboard:
+    pattern:  /
+    defaults: { _controller: MLabsAcraServerBundle:Issue:dashboard }
+    methods:  [GET]
+
+
+#_crash_test_data:
+#    pattern:  /crash/generate_data
+#    defaults: { _controller: MLabsAcraServerBundle:Crash:generateTestData }
+#    methods:  [GET]

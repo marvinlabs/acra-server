@@ -1,0 +1,60 @@
+{% extends 'MLabsAcraServerBundle::layout.html.twig' %}
+
+{% block main %}
+	<section>
+		<h1>{{ packageName }}</h1>
+	</section>
+	
+	<!-- Pie - Crashes per app version -->
+
+	<!-- Pie - Crashes per android version -->
+
+	<!-- Line - Crashes per version per date -->
+
+	<!-- List - Last 10 issues submitted -->
+	<section class="latest-issues">
+		<h2>Latest {{ crashes|length }} issues</h2>
+		{% if crashes %}
+			<table>
+				<thead>
+					{% block table_headers %}
+					<tr>
+						<th>Last Crash</th>
+						<th>Crashes</th>
+						<th>App versions</th>
+						<th>Android versions</th>
+						<th></th>
+					</tr>
+					{% endblock %}
+				</thead>
+				<tbody>
+				{% for c in crashes %}
+					{% set appVersions = c.appVersions|split(',')|sort %}
+					{% set shortAppVersions = appVersions|slice(-3, 3)|join(', ') %} 
+					{% if appVersions|length > 3 %}{% set shortAppVersions = "...#{shortAppVersions}" %}{% endif %}							
+					{% set appVersions = appVersions|join(', ') %} 
+					
+					{% set androidVersions = c.androidVersions|split(',')|sort %}
+					{% set shortAndroidVersions = androidVersions|slice(-3, 3)|join(', ') %} 
+					{% if androidVersions|length > 3 %}{% set shortAndroidVersions = "...#{shortAndroidVersions}" %}{% endif %}							
+					{% set androidVersions = androidVersions|join(', ') %} 
+					
+					<tr>
+						<td class="created-at">{{ c.latestCrashDate | date('d/m/Y H:i:s') }} (UTC)</td>
+						<td class="crash-num">{{ c.crashNum }}</td>
+						<td class="app-version" title="{{ appVersions|e }}">{{ shortAppVersions }}</td>
+						<td class="android-version" title="{{ androidVersions|e }}">{{ shortAndroidVersions }}</td>
+						<td class="action-link"><a href="{{ path('_issue_details', {'id': c.issueId}) }}" class="primary-button">Details</a></td>
+					</tr>
+				{% endfor %}
+				</tbody>
+				<tfoot>
+					{{ block('table_headers') }}
+				</tfoot>
+			</table>			
+		{% else %}
+			<p>No crashes have been submitted yet for your applications</p>
+		{% endif %}		
+	</section>
+
+{% endblock %}

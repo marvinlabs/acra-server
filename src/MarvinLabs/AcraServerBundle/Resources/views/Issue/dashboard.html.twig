@@ -1,0 +1,161 @@
+{% extends 'MLabsAcraServerBundle::layout.html.twig' %}
+
+{% block main %}
+
+	<section class="dashboard-header">
+		<div id="statistics-tabs" class="tab-container">				
+			<ul class="nav">
+		    	<li class="tab first"><a href="#distribution" class="current">Distribution</a></li>
+<!-- 	            <li class="tab last"><a href="#evolution">Evolution</a></li>  -->
+		    </ul>
+			
+		    <div class="content">		
+				<div id="distribution">
+					<div id="issues-per-app" class="graph-container half-width">
+						<div class="graph"></div>
+						<h4 class="title">Issues per application</h4>
+					</div>
+					<div id="crashes-per-app" class="graph-container half-width">
+						<div class="graph"></div>
+						<h4 class="title">Crashes per application</h4>
+					</div>
+				</div>
+<!-- 
+				<div id="evolution">
+					<div id="crash-in-time" class="graph-container full-width">
+						<div class="graph"></div>
+						<h4 class="title">Number of crashes with time</h4>
+					</div>
+				</div>
+ -->				
+			</div>
+		</div>
+	</section>
+
+	<!-- List - Last 10 issues submitted -->
+	<section class="latest-issues">
+		<h2>Latest {{ crashes|length }} issues</h2>
+		{% if crashes %}
+			<table>
+				<thead>
+					{% block table_headers %}
+					<tr>
+						<th>Package</th>
+						<th>Last Crash</th>
+						<th>Crashes</th>
+						<th>App versions</th>
+						<th>Android versions</th>
+						<th></th>
+					</tr>
+					{% endblock %}
+				</thead>
+				<tbody>
+				{% for c in crashes %}
+					{% set appVersions = c.appVersions|split(',')|sort %}
+					{% set shortAppVersions = appVersions|slice(-3, 3)|join(', ') %} 
+					{% if appVersions|length > 3 %}{% set shortAppVersions = "...#{shortAppVersions}" %}{% endif %}							
+					{% set appVersions = appVersions|join(', ') %} 
+					
+					{% set androidVersions = c.androidVersions|split(',')|sort %}
+					{% set shortAndroidVersions = androidVersions|slice(-3, 3)|join(', ') %} 
+					{% if androidVersions|length > 3 %}{% set shortAndroidVersions = "...#{shortAndroidVersions}" %}{% endif %}							
+					{% set androidVersions = androidVersions|join(', ') %} 
+					
+					<tr>
+						<td class="package-name">{{ c.packageName }}</td>
+						<td class="created-at">{{ c.latestCrashDate | date('d/m/Y H:i:s') }} (UTC)</td>
+						<td class="crash-num">{{ c.crashNum }}</td>
+						<td class="app-version" title="{{ appVersions|e }}">{{ shortAppVersions }}</td>
+						<td class="android-version" title="{{ androidVersions|e }}">{{ shortAndroidVersions }}</td>
+						<td class="action-link"><a href="{{ path('_issue_details', {'id': c.issueId}) }}" class="primary-button">Details</a></td>
+					</tr>
+				{% endfor %}
+				</tbody>
+				<tfoot>
+					{{ block('table_headers') }}
+				</tfoot>
+			</table>			
+		{% else %}
+			<p>No crashes have been submitted yet for your applications</p>
+		{% endif %}		
+	</section>
+
+{% endblock %}
+
+{% block javascripts %}
+    // The data for the charts
+    var pieChartOptions = { 
+   			series: {
+	        	pie: {
+	            	innerRadius: 0.5,
+	            	show: true
+	        	}
+	    	}
+	    };
+	    
+    var issuesPerAppData = [
+    {% for s in applicationStatistics %}
+		    {
+			    label: "{{ s.packageName }}",
+    			data: {{ s.issueNum }}
+			},
+	{% endfor %}
+		];
+	    
+    var crashesPerAppData = [
+    {% for s in applicationStatistics %}
+		    {
+			    label: "{{ s.packageName }}",
+    			data: {{ s.crashNum }}
+			},
+	{% endfor %}
+		];
+    
+    function redrawActiveTabCharts($, onlyActiveTab) {
+   		if (typeof(onlyActiveTab)==='undefined') onlyActiveTab = true;
+    	
+    	if (onlyActiveTab) {
+    		var activeTab = $(".tab-container").tabs( "option", "active" );
+	       	if (activeTab==0) {	
+			    $.plot("#issues-per-app .graph", issuesPerAppData, pieChartOptions);
+			    $.plot("#crashes-per-app .graph", crashesPerAppData, pieChartOptions);
+	       	}
+       	} else {
+			$.plot("#issues-per-app .graph", issuesPerAppData, pieChartOptions);
+			$.plot("#crashes-per-app .graph", crashesPerAppData, pieChartOptions);
+       	}
+    }
+    
+    $(document).ready(function(){ 	    
+	    // Tab handling
+	    var globalTabOptions = {
+		        hide: { effect: "fade", duration: 300 },
+		        show: { effect: "fade", duration: 300 },
+		        
+		       	// Following is to fix the page jump
+		       	// see: http://stackoverflow.com/questions/243794/jquery-ui-tabs-causing-screen-to-jump
+				select: function(event, ui) {
+					jQuery(this).css('height', jQuery(this).height());
+					jQuery(this).css('overflow', 'hidden');
+				},
+				show: function(event, ui) {
+					jQuery(this).css('height', 'auto');
+					jQuery(this).css('overflow', 'visible');
+				}
+			};
+		var graphTabOptions = $.extend(globalTabOptions, {
+		        activate: function( event, ui ) {
+		        	redrawActiveTabCharts($);	
+		        },
+		        create: function( event, ui ) {
+		        	redrawActiveTabCharts($, false);	
+		        }
+	        });
+	    $("#statistics-tabs").tabs(graphTabOptions);
+	    
+	    // Redraw charts when window is resized
+	    $(window).resize(function() {
+	    	redrawActiveTabCharts($);	
+		});
+	});
+{% endblock %}

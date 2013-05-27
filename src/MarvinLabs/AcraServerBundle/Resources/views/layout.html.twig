@@ -2,7 +2,13 @@
 
 {% block navigation %}
 <ul>
-    <li><a href="{{ path('_crash_list') }}">Crashes</a></li>
+    <li><a href="{{ path('_main_dashboard') }}">Dashboard</a></li>
+    <li><a href="#">Applications</a><ul>
+		{% for a in applications %}
+	    	<li><a href="{{ path('_app_dashboard', {'packageName': a.packageName}) }}">{{ a.packageName }}</a></li>
+		{% endfor %}
+	    </ul>
+	</li>
 </ul>
 {% endblock %}
 

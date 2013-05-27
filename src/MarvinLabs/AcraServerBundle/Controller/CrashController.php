@@ -4,24 +4,30 @@ namespace MarvinLabs\AcraServerBundle\Controller;
 
 use Doctrine\ORM\Mapping\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
+use MarvinLabs\AcraServerBundle\Controller\DefaultViewController;
 use MarvinLabs\AcraServerBundle\Entity\Crash;
 use MarvinLabs\AcraServerBundle\DataFixtures\LoadFixtureData;
 
-class CrashController extends Controller
+class CrashController extends DefaultViewController
 {
-	public function generateTestDataAction()
-	{	
-  		$doctrine = $this->getDoctrine()->getManager();
+	// TODO Disable in PROD environment
+// 	public function generateTestDataAction()
+// 	{	
+//   		$doctrine = $this->getDoctrine()->getManager();
 		
-  		$fixtureDataLoader = new LoadFixtureData();
-  		$fixtures = $fixtureDataLoader->load($doctrine);
+//   		$fixtureDataLoader = new LoadFixtureData();
+//   		$fixtures = $fixtureDataLoader->load($doctrine);
 
-  		return new Response( var_dump($fixtures) );
-	}
+//   		return new Response( var_dump($fixtures) );
+// 	}
 	
+	/**
+	 * Add a crash to the DB and send a notification to the crash admin
+	 * 
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
 	public function addAction()
 	{	
     	$crash = $this->newCrashFromRequest($this->getRequest());
@@ -43,6 +49,11 @@ class CrashController extends Controller
 		return new Response( '' );
 	}
 
+	/**
+	 * List the crashes
+	 * 
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
 	public function listAction()
 	{		 
 		$request = $this->getRequest();
@@ -68,12 +79,13 @@ class CrashController extends Controller
 				->getQuery()
 				->getResult();
 		
-		return $this->render('MLabsAcraServerBundle:Crash:list.html.twig', array(
-				'crashes'   	=> $crashes,
-				'crashNum'		=> $crashNum,
-				'page'			=> $currentPage,
-				'totalPages'	=> $crashNum / $crashesPerPage
-			));
+		return $this->render('MLabsAcraServerBundle:Crash:list.html.twig', $this->getViewParameters(
+				array(
+						'crashes'   	=> $crashes,
+						'crashNum'		=> $crashNum,
+						'page'			=> $currentPage,
+						'totalPages'	=> $crashNum / $crashesPerPage
+					)));
 	}
 	
     /**
@@ -88,9 +100,10 @@ class CrashController extends Controller
             throw $this->createNotFoundException('Unable to find crash.');
         }
 
-        return $this->render('MLabsAcraServerBundle:Crash:details.html.twig', array(
-	            'crash'      => $crash,
-	        ));
+        return $this->render('MLabsAcraServerBundle:Crash:details.html.twig', $this->getViewParameters(
+        		array(
+	            		'crash'      => $crash,
+	        		)));
     }
     
     /**
@@ -165,4 +178,20 @@ class CrashController extends Controller
     	
     	return $crash;
     }
+    
+    // --------------------------------------------------------------------------------------
+    // IAcraServerController implementation
+    
+    public function getApplications() 
+    {
+    	return $this->applications;	
+    }
+
+    public function setApplications($applications)
+    {
+    	$this->applications = $applications;
+    }
+    
+    /** @var array */
+    private $applications;
 }

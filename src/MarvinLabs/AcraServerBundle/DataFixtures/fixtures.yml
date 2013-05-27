@@ -1,5 +1,5 @@
 MarvinLabs\AcraServerBundle\Entity\Crash:
-    crash{1..1000}:
+    crash{1..3000}:
         status: <crashStatus()>
         issueId:
         reportId: <uuid>
@@ -15,7 +15,7 @@ MarvinLabs\AcraServerBundle\Entity\Crash:
         totalMemSize: <randomNumber(30000000, 64000000)>
         availableMemSize: <randomNumber(1000000, 30000000)>
         customData:
-        stackTrace: <stackTrace()>
+        stackTrace: <stackTrace($packageName)>
         initialConfiguration:
         crashConfiguration:
         display:

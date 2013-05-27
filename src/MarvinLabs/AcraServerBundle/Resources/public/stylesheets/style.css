@@ -271,32 +271,32 @@ table {
   .card-container:after {
     clear: both; }
 
-.graph-container {
+.graph-container, section {
   *zoom: 1;
   display: block; }
-  .graph-container:before, .graph-container:after {
+  .graph-container:before, .graph-container:after, section:before, section:after {
     content: " ";
     display: table; }
-  .graph-container:after {
+  .graph-container:after, section:after {
     clear: both; }
-  .graph-container.full-width {
+  .graph-container.full-width, section.full-width {
     display: block;
     float: left;
     margin-right: 2.35765%;
     width: 100%;
     margin-right: 0; }
-    .graph-container.full-width:last-child {
+    .graph-container.full-width:last-child, section.full-width:last-child {
       margin-right: 0; }
-  .graph-container.half-width {
+  .graph-container.half-width, section.half-width {
     display: block;
     float: left;
     margin-right: 2.35765%;
     width: 48.82117%; }
-    .graph-container.half-width:last-child {
+    .graph-container.half-width:last-child, section.half-width:last-child {
       margin-right: 0; }
-    .graph-container.half-width:nth-child(2n) {
+    .graph-container.half-width:nth-child(2n), section.half-width:nth-child(2n) {
       margin-right: 0; }
-    .graph-container.half-width:nth-child(2n+1) {
+    .graph-container.half-width:nth-child(2n+1), section.half-width:nth-child(2n+1) {
       clear: left; }
 
 /************************************************************************************ */
@@ -566,8 +566,37 @@ div.pagination {
       clear: both; }
   #main-header nav.main-navigation li, #main-header nav.breadcrumb li {
     float: left; }
-  #main-header nav.main-navigation {
-    padding: 2em 0; }
+
+/************************************************************************************ */
+/** MENU */
+nav.main-navigation a {
+  display: inline-block;
+  width: 100%;
+  padding: 0.8em 1em;
+  color: #333333; }
+  nav.main-navigation a:hover {
+    color: white;
+    text-decoration: none; }
+nav.main-navigation ul li {
+  position: relative; }
+  nav.main-navigation ul li:hover {
+    background: #3366cc; }
+    nav.main-navigation ul li:hover a {
+      color: white; }
+    nav.main-navigation ul li:hover ul {
+      display: block; }
+nav.main-navigation ul ul {
+  display: none;
+  background: #3366cc;
+  border-radius: 0px;
+  padding: 0;
+  position: absolute;
+  top: 100%; }
+  nav.main-navigation ul ul li {
+    float: none;
+    width: 100%; }
+    nav.main-navigation ul ul li:hover {
+      background: #dd4b39; }
 
 /************************************************************************************ */
 /** FOOTER */

@@ -25,7 +25,7 @@ $padding: flex-gutter() / 2;
 	@include span-columns(12);
 	@include row();
 }
-.graph-container {
+.graph-container, section {
 	@include row();	
 	&.full-width {
 		@include span-columns(12 of 12);
@@ -279,8 +279,50 @@ div.pagination {
 			float: left;
 		}
 	}
-	nav.main-navigation {
-		padding: 2em 0;
+}
+
+/************************************************************************************ */
+/** MENU */
+
+nav.main-navigation {
+	a {
+		display: inline-block;
+		width: 100%;
+		padding: 0.8em 1em;
+		color: $heading-text-color;
+		&:hover {
+			color: white;
+			text-decoration: none;
+		}
+	}
+	ul li {
+		position: relative;
+		&:hover {
+			background: $secondary-color;
+			a {
+				color: white;
+			}
+			ul {
+				display: block;
+			}
+		}
+	}	
+	ul ul {
+		display: none;
+		background: $secondary-color;
+		border-radius: 0px; 
+		padding: 0;
+		position: absolute; 
+		top: 100%;
+		
+		li {
+			float: none; 
+			width: 100%; 
+			
+			&:hover {
+				background: $primary-color;
+			}
+		}
 	}
 }
 

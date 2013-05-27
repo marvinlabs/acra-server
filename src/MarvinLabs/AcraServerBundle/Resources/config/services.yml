@@ -7,3 +7,9 @@ services:
         arguments: [%m_labs_acra_server.table_prefix%]
         tags:
             - { name: doctrine.event_subscriber }
+
+    m_labs_acra_server.before_controller_action_listener:
+        class: MarvinLabs\AcraServerBundle\EventListener\BeforeControllerListener
+        arguments: []
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

@@ -106,11 +106,11 @@ class LoadFixtureData implements FixtureInterface
    		return sprintf("%d.%d.%d", $major, $minor, $fix);
    	}   
 
-   	public function stackTrace()
+   	public function stackTrace($packageName)
    	{
        	$arr = array(
 	   			'java.lang.RuntimeException: Some message for the exception
-	at fr.marvinlabs.acrabuggenerator.MainActivity.onClick(MainActivity.java:34)
+	at %%PKG%%.MainActivity.onClick(MainActivity.java:34)
 	at android.view.View.performClick(View.java:4204)
 	at android.view.View$PerformClick.run(View.java:17359)
 	at android.os.Handler.handleCallback(Handler.java:725)
@@ -124,7 +124,7 @@ class LoadFixtureData implements FixtureInterface
 	at dalvik.system.NativeStart.main(Native Method)
        			',
 	           	'java.lang.NullPointerException
-	at fr.marvinlabs.acrabuggenerator.MainActivity.onClick(MainActivity.java:37)
+	at %%PKG%%.MainActivity.onClick(MainActivity.java:37)
 	at android.view.View.performClick(View.java:4204)
 	at android.view.View$PerformClick.run(View.java:17359)
 	at android.os.Handler.handleCallback(Handler.java:725)
@@ -138,7 +138,7 @@ class LoadFixtureData implements FixtureInterface
 	at dalvik.system.NativeStart.main(Native Method)
        			',
 	           	'java.lang.InvalidArgumentException
-	at fr.marvinlabs.acrabuggenerator.MainActivity.onClick(MainActivity.java:37)
+	at %%PKG%%.MainActivity.onClick(MainActivity.java:37)
 	at android.view.View.performClick(View.java:4204)
 	at android.view.View$PerformClick.run(View.java:17359)
 	at android.os.Handler.handleCallback(Handler.java:725)
@@ -152,7 +152,7 @@ class LoadFixtureData implements FixtureInterface
 	at dalvik.system.NativeStart.main(Native Method)
        			',
 	           	'java.lang.ReflectionInvocationException
-	at fr.marvinlabs.acrabuggenerator.MainActivity.onClick(MainActivity.java:37)
+	at %%PKG%%.MainActivity.onClick(MainActivity.java:37)
 	at android.view.View.performClick(View.java:4204)
 	at android.view.View$PerformClick.run(View.java:17359)
 	at android.os.Handler.handleCallback(Handler.java:725)
@@ -167,6 +167,6 @@ class LoadFixtureData implements FixtureInterface
        			',
 	       	);
 
-       	return $arr[array_rand($arr)];
+       	return str_replace('%%PKG%%', $packageName, $arr[array_rand($arr)]);
    	}
 }//*
