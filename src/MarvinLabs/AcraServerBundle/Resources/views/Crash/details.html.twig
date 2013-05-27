@@ -31,8 +31,8 @@
 	</ul>
 </section>
 
-<section class="card-container crash-header">
-	<div class="tab-container">				
+<section class="crash-header">
+	<div id="statistics-tabs" class="tab-container">				
 		<ul class="nav">
 	    	<li class="tab first"><a href="#distribution" class="current">Distribution</a></li>
             <li class="tab last"><a href="#evolution">Evolution</a></li>
@@ -60,7 +60,7 @@
 </section>
 
 <section class="crash-details">
-	<div class="tab-container">				
+	<div id="details-tabs" class="tab-container">				
 		<ul class="nav">
 	    	<li class="tab first"><a href="#stacktrace" class="current">Stacktrace</a></li>
             <li class="tab"><a href="#device">Device</a></li>
@@ -238,16 +238,31 @@
     
     $(document).ready(function(){ 	    
 	    // Tab handling
-	    $(".tab-container").tabs({
-	        activate: function( event, ui ) {
-	        	redrawActiveTabCharts($);	
-	        },
-	        create: function( event, ui ) {
-	        	redrawActiveTabCharts($, false);	
-	        },
-	        hide: { effect: "fade", duration: 300 },
-	        show: { effect: "fade", duration: 300 }
-	    });
+	    var globalTabOptions = {
+		        hide: { effect: "fade", duration: 300 },
+		        show: { effect: "fade", duration: 300 },
+		        
+		       	// Following is to fix the page jump
+		       	// see: http://stackoverflow.com/questions/243794/jquery-ui-tabs-causing-screen-to-jump
+				select: function(event, ui) {
+					jQuery(this).css('height', jQuery(this).height());
+					jQuery(this).css('overflow', 'hidden');
+				},
+				show: function(event, ui) {
+					jQuery(this).css('height', 'auto');
+					jQuery(this).css('overflow', 'visible');
+				}
+			};
+		var graphTabOptions = $.extend(globalTabOptions, {
+		        activate: function( event, ui ) {
+		        	redrawActiveTabCharts($);	
+		        },
+		        create: function( event, ui ) {
+		        	redrawActiveTabCharts($, false);	
+		        }
+	        });
+	    $("#details-tabs").tabs(globalTabOptions);
+	    $("#statistics-tabs").tabs(graphTabOptions);
 	    
 	    // Redraw charts when window is resized
 	    $(window).resize(function() {
