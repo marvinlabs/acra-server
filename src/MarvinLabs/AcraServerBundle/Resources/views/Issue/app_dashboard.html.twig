@@ -1,6 +1,13 @@
 {% extends 'MLabsAcraServerBundle::layout.html.twig' %}
 
+{% import 'MLabsAcraServerBundle::breadcrumb.html.twig' as breadcrumb %}
 {% block main %}
+
+{{ breadcrumb.echo([ 
+			{ label: 'Dashboard', link: path('_main_dashboard') },
+			{ label: 'App #' ~ packageName, link: path('_app_dashboard', {'packageName': packageName}) }
+		]) }}
+		
 	<section>
 		<h1>{{ packageName }}</h1>
 	</section>

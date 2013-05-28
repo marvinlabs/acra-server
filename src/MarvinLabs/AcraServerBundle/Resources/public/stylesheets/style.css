@@ -441,6 +441,24 @@ table {
     clear: both; }
 
 /************************************************************************************ */
+/** BREADCRUMB */
+#main-content section.breadcrumb {
+  padding-bottom: 0; }
+  #main-content section.breadcrumb a {
+    display: inline-block;
+    padding: 2px 1em;
+    color: #999999;
+    -webkit-border-radius: 2px;
+    border-radius: 2px; }
+    #main-content section.breadcrumb a:hover {
+      text-decoration: none;
+      background: #3366cc;
+      color: white; }
+  #main-content section.breadcrumb .current {
+    opacity: 0.7;
+    padding: 2px 8px; }
+
+/************************************************************************************ */
 /** CARDS */
 .card {
   /* We don't use neat columns because of masonry */
@@ -541,12 +559,14 @@ div.pagination {
   margin: 2em;
   text-align: right; }
   div.pagination a {
+    color: #999999;
     display: inline-block;
     padding: 4px 8px;
     -webkit-border-radius: 2px;
     border-radius: 2px; }
     div.pagination a:hover {
-      background: #f1f1f1;
+      color: white;
+      background: #3366cc;
       text-decoration: none; }
   div.pagination a.active, div.pagination a.active:hover, div.pagination a.active:visited {
     color: #dd4b39;
@@ -615,7 +635,7 @@ nav.main-navigation {
 /************************************************************************************ */
 /** GENERAL CONTENT */
 #main-content section {
-  padding: 2.35765%; }
+  padding: 2em 2.35765%; }
 
 /************************************************************************************ */
 /** CRASH LIST */

@@ -1,8 +1,7 @@
 {% extends 'MLabsAcraServerBundle::layout.html.twig' %}
 
-{% import 'MLabsAcraServerBundle::cards.html.twig' as cards %}
+{% import 'MLabsAcraServerBundle::breadcrumb.html.twig' as breadcrumb %}
 {% import _self as fields %}
-
 
 {% macro echo(title, value, test, value_wrapper, outer_tag) %}
 	{% if test | default(value) %}	
@@ -15,48 +14,26 @@
 
 {% block main %}
 
+{{ breadcrumb.echo([ 
+			{ label: 'Dashboard', link: path('_main_dashboard') },
+			{ label: 'App #' ~ crash.packageName, link: path('_app_dashboard', {'packageName': crash.packageName}) },
+			{ label: 'Issue #' ~ crash.issueId, link: path('_issue_details', {'id': crash.issueId}) },
+			{ label: 'Crash #' ~ crash.id, link: path('_crash_details', {'id': crash.id}) },
+		]) }}
 
-<section class="card-container crash-header">
-	<h2>Crash #{{ crash.id }}</h2>
-	
+<section class="crash-header">
+	<h1>{{ crash.packageName }} // Crash #{{ crash.id }}</h1>
+
 	<ul>
 		{{ fields.echo('Package', crash.packageName) }}
 		{{ fields.echo('Version', "#{ crash.appVersionName } ~ #{ crash.appVersionCode }", crash.appVersionName) }}
-		{{ fields.echo('Submitted', "#{crash.createdAt | date('Y-m-d H:i:s')} (UTC)", crash.createdAt) }}
 		{{ fields.echo('Status', crash.statusAsString) }}
+		{{ fields.echo('App crash', "#{crash.userCrashDate | date('Y-m-d H:i:s')} (UTC)", crash.userCrashDate) }}
+		{{ fields.echo('App start', "#{crash.userAppStartDate | date('Y-m-d H:i:s')} (UTC)", crash.userAppStartDate) }}
+		{{ fields.echo('Submitted', "#{crash.createdAt | date('Y-m-d H:i:s')} (UTC)", crash.createdAt) }}
 		{{ fields.echo('User comment', crash.userComment) }}
 		{{ fields.echo('User email', crash.userEmail) }}
-		{{ fields.echo('App start', crash.userAppStartDate) }}
-		{{ fields.echo('App crash', crash.userCrashDate) }}
 	</ul>
-</section>
-
-<section class="crash-header">
-	<div id="statistics-tabs" class="tab-container">				
-		<ul class="nav">
-	    	<li class="tab first"><a href="#distribution" class="current">Distribution</a></li>
-            <li class="tab last"><a href="#evolution">Evolution</a></li>
-	    </ul>
-		
-	    <div class="content">		
-			<div id="distribution">
-				<div id="crash-app-versions" class="graph-container half-width">
-					<div class="graph"></div>
-					<h4 class="title">Application versions</h4>
-				</div>
-				<div id="crash-android-versions" class="graph-container half-width">
-					<div class="graph"></div>
-					<h4 class="title">Android versions</h4>
-				</div>
-			</div>
-			<div id="evolution">
-				<div id="crash-in-time" class="graph-container full-width">
-					<div class="graph"></div>
-					<h4 class="title">Number of crashes with time</h4>
-				</div>
-			</div>
-		</div>
-	</div>
 </section>
 
 <section class="crash-details">
@@ -128,114 +105,7 @@
 
 {% endblock %}
 
-{% block javascripts %}
-    // The data for the charts
-    var pieChartOptions = { 
-   			series: {
-	        	pie: {
-	            	innerRadius: 0.5,
-	            	show: true
-	        	}
-	    	}
-	    };
-	    
-    var lineGraphOptions = { 
-			xaxis: {
-				mode: "time",
-				minTickSize: [1, "day"],
-				min: 1014937200000,
-				max: 1199142000000,
-				twelveHourClock: false
-			}
-	    };
-	    
-    var appVersionsData = [
-		    {
-			    label: "1.0",
-    			data: 10
-			},
-		    {
-			    label: "2.0",
-    			data: 40
-			},
-		    {
-			    label: "3.0",
-    			data: 20
-			},
-		    {
-			    label: "4.0",
-    			data: 30
-			},
-		];
-	    
-    var androidVersionsData = [
-		    {
-			    label: "2.2",
-    			data: 60
-			},
-		    {
-			    label: "2.3",
-    			data: 20
-			},
-		    {
-			    label: "4.1",
-    			data: 10
-			},
-		    {
-			    label: "4.2.1",
-    			data: 5
-			},
-		    {
-			    label: "4.2.2",
-    			data: 5
-			},
-		];
-	    
-    var timeData = [[
-		    [1014937200000, 373.81], [1017612000000, 374.93], [1020204000000, 375.58], 
-		    [1022882400000, 375.44], [1025474400000, 373.86], [1028152800000, 371.77], 
-		    [1030831200000, 370.73], [1033423200000, 370.50], [1036105200000, 372.18], 
-		    [1038697200000, 373.70], [1041375600000, 374.92], [1044054000000, 375.62], 
-		    [1046473200000, 376.51], [1049148000000, 377.75], [1051740000000, 378.54], 
-		    [1054418400000, 378.20], [1057010400000, 376.68], [1059688800000, 374.43], 
-		    [1062367200000, 373.11], [1064959200000, 373.10], [1067641200000, 374.77], 
-		    [1070233200000, 375.97], [1072911600000, 377.03], [1075590000000, 377.87], 
-		    [1078095600000, 378.88], [1080770400000, 380.42], [1083362400000, 380.62], 
-		    [1086040800000, 379.70], [1088632800000, 377.43], [1091311200000, 376.32], 
-		    [1093989600000, 374.19], [1096581600000, 374.47], [1099263600000, 376.15], 
-		    [1101855600000, 377.51], [1104534000000, 378.43], [1107212400000, 379.70], 
-		    [1109631600000, 380.92], [1112306400000, 382.18], [1114898400000, 382.45], 
-		    [1117576800000, 382.14], [1120168800000, 380.60], [1122847200000, 378.64], 
-		    [1125525600000, 376.73], [1128117600000, 376.84], [1130799600000, 378.29], 
-		    [1133391600000, 380.06], [1136070000000, 381.40], [1138748400000, 382.20], 
-		    [1141167600000, 382.66], [1143842400000, 384.69], [1146434400000, 384.94], 
-		    [1149112800000, 384.01], [1151704800000, 382.14], [1154383200000, 380.31], 
-		    [1157061600000, 378.81], [1159653600000, 379.03], [1162335600000, 380.17], 
-		    [1164927600000, 381.85], [1167606000000, 382.94], [1170284400000, 383.86], 
-		    [1172703600000, 384.49], [1175378400000, 386.37], [1177970400000, 386.54], 
-		    [1180648800000, 385.98], [1183240800000, 384.36], [1185919200000, 381.85], 
-		    [1188597600000, 380.74], [1191189600000, 381.15], [1193871600000, 382.38], 
-		    [1196463600000, 383.94], [1199142000000, 385.44]
-		]];
-    
-    function redrawActiveTabCharts($, onlyActiveTab) {
-   		if (typeof(onlyActiveTab)==='undefined') onlyActiveTab = true;
-    	
-    	if (onlyActiveTab) {
-    		var activeTab = $(".tab-container").tabs( "option", "active" );
-	       	if (activeTab==0) {	
-			    $.plot("#crash-app-versions .graph", appVersionsData, pieChartOptions);
-			    $.plot("#crash-android-versions .graph", androidVersionsData, pieChartOptions);
-	       	} else if (activeTab==1) {
-				$.plot("#crash-in-time .graph", timeData, lineGraphOptions);
-	       	}	
-       	} else {
-		    $.plot("#crash-app-versions .graph", appVersionsData, pieChartOptions);
-		    $.plot("#crash-android-versions .graph", androidVersionsData, pieChartOptions);
-			$.plot("#crash-in-time .graph", timeData, lineGraphOptions);
-       	}
-    }
-    
+{% block javascripts %}    
     $(document).ready(function(){ 	    
 	    // Tab handling
 	    var globalTabOptions = {
@@ -253,21 +123,8 @@
 					jQuery(this).css('overflow', 'visible');
 				}
 			};
-		var graphTabOptions = $.extend(globalTabOptions, {
-		        activate: function( event, ui ) {
-		        	redrawActiveTabCharts($);	
-		        },
-		        create: function( event, ui ) {
-		        	redrawActiveTabCharts($, false);	
-		        }
-	        });
 	    $("#details-tabs").tabs(globalTabOptions);
-	    $("#statistics-tabs").tabs(graphTabOptions);
-	    
-	    // Redraw charts when window is resized
-	    $(window).resize(function() {
-	    	redrawActiveTabCharts($);	
-		});
 	});
 {% endblock %}
+
 

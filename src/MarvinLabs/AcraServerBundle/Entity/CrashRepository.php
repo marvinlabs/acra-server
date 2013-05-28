@@ -9,16 +9,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class CrashRepository extends EntityRepository
 {
-	public function createBaseListQueryBuilder()
-	{
-		$qb = $this->createQueryBuilder('c')->orderBy('c.userCrashDate', 'DESC');
-		return $qb;
-	}
 	
 	/**
 	 * Get some statistics for a particular application
 	 */
-	public function findApplicationVersionsStatistics($packageName, $limit=15) {    
+	public function newApplicationVersionsStatisticsQuery($packageName) {    
     	$where = "c.status=:status ";
     	$params = array( 'status' => Crash::$STATUS_NEW );
     	
@@ -39,15 +34,13 @@ class CrashRepository extends EntityRepository
     	    	
         return $this->getEntityManager()
         		->createQuery($query)
-        		->setParameters($params)
-        		->setMaxResults($limit)
-            	->getResult();
+        		->setParameters($params);
 	}
 	
 	/**
 	 * Get some statistics for a particular application
 	 */
-	public function findApplicationAndroidVersionsStatistics($packageName) {    	
+	public function newApplicationAndroidVersionsStatisticsQuery($packageName) {    	
     	$where = "c.status=:status ";
     	$params = array( 'status' => Crash::$STATUS_NEW );
     	
@@ -67,14 +60,13 @@ class CrashRepository extends EntityRepository
     	    	
         return $this->getEntityManager()
         		->createQuery($query)
-        		->setParameters($params)
-            	->getResult();
+        		->setParameters($params);
 	}
 	
 	/**
 	 * Get some statistics for a particular application
 	 */
-	public function findApplicationTimeStatistics($packageName) {    	
+	public function newApplicationTimeStatisticsQuery($packageName) {    	
     	$where = "1=1 ";
     	$params = array();
     	
@@ -96,14 +88,13 @@ class CrashRepository extends EntityRepository
     	
         return $this->getEntityManager()
         		->createQuery($query)
-        		->setParameters($params)
-            	->getResult();
+        		->setParameters($params);
 	}
 	
 	/**
 	 * Get some statistics for a particular application
 	 */
-	public function findApplicationsTimeStatistics() {    	
+	public function newApplicationsTimeStatisticsQuery() {    	
     	$query = "SELECT "
     					. "MIN(c.userCrashDate) as crashDate, "
     					. "YEAR(c.userCrashDate) as crashDateYear, "
@@ -115,14 +106,13 @@ class CrashRepository extends EntityRepository
         			. "ORDER BY crashDate ASC ";
     	
         return $this->getEntityManager()
-        		->createQuery($query)
-            	->getResult();
+        		->createQuery($query);
 	}
 	
 	/**
 	 * Get some statistics for the registered applications
 	 */
-	public function findApplicationsStatistics() {    	
+	public function newApplicationsStatisticsQuery() {    	
     	$query = "SELECT c.packageName as packageName, "
     					. "COUNT(DISTINCT c.issueId) as issueNum, "
     					. "COUNT(DISTINCT c.id) as crashNum "
@@ -131,32 +121,91 @@ class CrashRepository extends EntityRepository
         			. "ORDER BY c.packageName ASC ";
     	    	
         return $this->getEntityManager()
-        		->createQuery($query)
-            	->getResult();
+        		->createQuery($query);
 	}
 	
 	/**
 	 * Get the number of issues per application
 	 */
-	public function findAllApplications() {    	
+	public function newAllApplicationsQuery() {    	
     	$query = "SELECT DISTINCT c.packageName as packageName "
         			. "FROM MarvinLabs\AcraServerBundle\Entity\Crash c "
         			. "ORDER BY c.packageName ASC ";
     	    	
         return $this->getEntityManager()
-        		->createQuery($query)
-            	->getResult();
+        		->createQuery($query);
 	}
+	
+	/**
+	 * Get the issue details 
+	 *  
+	 * @param number $issueId 
+	 * 
+	 * @return array
+	 */
+    public function newIssueDetailsQuery($issueId)
+    {
+    	$where = "1=1 ";
+    	$params = array();
+    	
+    	if ($issueId!=null) {
+    		$where .= 'AND c.issueId=:issueId ';
+    		$params['issueId'] = $issueId;
+    	}
+    	
+    	$query = "SELECT c.issueId as issueId, "
+        				. "GROUP_CONCAT(DISTINCT c.appVersionName) as appVersions, "
+        				. "GROUP_CONCAT(DISTINCT c.androidVersion) as androidVersions, "
+        				. "GROUP_CONCAT(DISTINCT c.packageName) as packageName, "
+        				. "GROUP_CONCAT(DISTINCT c.status) as statuses, "
+        				. "COUNT(c.id) as crashNum, "
+        				. "MAX(c.userCrashDate) as latestCrashDate "
+        			. "FROM MarvinLabs\AcraServerBundle\Entity\Crash c "
+        			. "WHERE " . $where 
+        			. "GROUP BY c.issueId "
+        			. "ORDER BY c.userCrashDate DESC ";
+    	    	
+        return $this->getEntityManager()
+        		->createQuery($query)
+        		->setParameters($params);
+    }
+	
+	/**
+	 * Get the issue details 
+	 *  
+	 * @param number $issueId 
+	 * 
+	 * @return array
+	 */
+    public function newIssueCrashesQuery($issueId)
+    {
+    	$where = "1=1 ";
+    	$params = array();
+    	
+    	if ($issueId!=null) {
+    		$where .= 'AND c.issueId=:issueId ';
+    		$params['issueId'] = $issueId;
+    	}
+    	
+    	$query = "SELECT c "
+        			. "FROM MarvinLabs\AcraServerBundle\Entity\Crash c "
+        			. "WHERE " . $where 
+        			. "ORDER BY c.userCrashDate DESC ";
+    	    	
+        return $this->getEntityManager()
+        		->createQuery($query)
+        		->setParameters($params);     
+    }
 	
 	/**
 	 * Get the latest issues (crashes that are supposed to be similar)
 	 *  
 	 * @param string $packageName A package name to get only for this particular app or null
-	 * @param number $limit The max number of issues to return
+	 * @param number $limit The max number of issues to return (-1 for all)
 	 * 
 	 * @return array
 	 */
-    public function findLatestIssues($packageName=null, $limit=10)
+    public function newLatestIssuesQuery($packageName=null)
     {
     	$where = "c.status=:status ";
     	$params = array( 'status' => Crash::$STATUS_NEW );
@@ -177,11 +226,9 @@ class CrashRepository extends EntityRepository
         			. "WHERE " . $where 
         			. "GROUP BY c.issueId "
         			. "ORDER BY c.userCrashDate DESC ";
-    	    	
-        return $this->getEntityManager()
-        		->createQuery($query)
-        		->setParameters($params)
-        		->setMaxResults($limit)
-            	->getResult();
+
+    	return $this->getEntityManager()
+		    	->createQuery($query)
+		    	->setParameters($params);   
     }
 }

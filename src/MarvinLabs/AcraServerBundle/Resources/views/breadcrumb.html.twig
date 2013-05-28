@@ -1,0 +1,21 @@
+{% macro echo(tokens) %}
+<section class="breadcrumb">
+
+{% set isFirst = true %}
+{% set lastToken = tokens|last %}
+
+{% for token in tokens %}	
+	{% if isFirst == false %}
+	<span class="separator"> &raquo; </span>
+	{% endif %}
+	{% set isFirst = false %}
+	
+	{% if token==lastToken %}
+	<span class="token current">{{ token.label }}</span>
+	{% else %}
+	<span class="token"><a href="{{ token.link }}">{{ token.label }}</a></span>
+	{% endif %}
+{% endfor %}
+</section>
+{% endmacro %}
+
