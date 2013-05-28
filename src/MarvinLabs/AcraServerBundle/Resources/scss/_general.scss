@@ -214,6 +214,9 @@ table {
 			width: auto;
 			tr {
 				border: none;
+				&:hover {
+					background: transparent;
+				}
 			}
 			td {
 				padding-bottom: 5px;
@@ -229,6 +232,10 @@ table {
 		margin: 2em 0;
 		text-align: center;
 		color: $body-text-color;
+	}
+	
+	.pie-label {
+		color: white;
 	}
 }
 
@@ -285,6 +292,8 @@ div.pagination {
 /** MENU */
 
 nav.main-navigation {
+	position: relative;
+	z-index: 50000;
 	a {
 		display: inline-block;
 		width: 100%;

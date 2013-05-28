@@ -82,28 +82,23 @@ class LoadFixtureData implements FixtureInterface
        	$v = array(
 	           '2.2',
 	           '2.3',
-	           '2.3.5',
-	           '2.3.6',
 	           '3.0',
 	           '3.1',
 	           '3.2',
 	           '4.0',
 	           '4.1',
 	           '4.2',
-	           '4.2.1',
-	           '4.2.2',
 	  		);
 
        	return $v[array_rand($v)];
    	}
 
-   	public function appVersion()
+   	public function appVersion($appVersionCode)
    	{
-   		$major 	= rand(1, 5);
-   		$minor 	= rand(0, 9);
-   		$fix 	= rand(0, 9);
+   		$major 	= (int)($appVersionCode / 10);
+   		$minor 	= (int)($appVersionCode % 10);
    
-   		return sprintf("%d.%d.%d", $major, $minor, $fix);
+   		return sprintf("%d.%d", $major, $minor);
    	}   
 
    	public function stackTrace($packageName)
@@ -152,6 +147,34 @@ class LoadFixtureData implements FixtureInterface
 	at dalvik.system.NativeStart.main(Native Method)
        			',
 	           	'java.lang.ReflectionInvocationException
+	at %%PKG%%.MainActivity.onClick(MainActivity.java:37)
+	at android.view.View.performClick(View.java:4204)
+	at android.view.View$PerformClick.run(View.java:17359)
+	at android.os.Handler.handleCallback(Handler.java:725)
+	at android.os.Handler.dispatchMessage(Handler.java:92)
+	at android.os.Looper.loop(Looper.java:137)
+	at android.app.ActivityThread.main(ActivityThread.java:5259)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:511)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:795)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:562)
+	at dalvik.system.NativeStart.main(Native Method)
+       			',
+	           	'java.lang.FunkyInvocationException
+	at %%PKG%%.MainActivity.onClick(MainActivity.java:37)
+	at android.view.View.performClick(View.java:4204)
+	at android.view.View$PerformClick.run(View.java:17359)
+	at android.os.Handler.handleCallback(Handler.java:725)
+	at android.os.Handler.dispatchMessage(Handler.java:92)
+	at android.os.Looper.loop(Looper.java:137)
+	at android.app.ActivityThread.main(ActivityThread.java:5259)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:511)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:795)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:562)
+	at dalvik.system.NativeStart.main(Native Method)
+       			',
+	           	'java.lang.GimmeAManAfterMidnightException
 	at %%PKG%%.MainActivity.onClick(MainActivity.java:37)
 	at android.view.View.performClick(View.java:4204)
 	at android.view.View$PerformClick.run(View.java:17359)

@@ -4,13 +4,13 @@ namespace MarvinLabs\AcraServerBundle\Controller;
 
 use Doctrine\ORM\Mapping\Entity;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-use MarvinLabs\AcraServerBundle\Controller\DefaultViewController;
 use MarvinLabs\AcraServerBundle\Entity\Crash;
 use MarvinLabs\AcraServerBundle\DataFixtures\LoadFixtureData;
 
-class CrashController extends DefaultViewController
+class CrashController extends Controller
 {
 	// TODO Disable in PROD environment
 // 	public function generateTestDataAction()
@@ -48,63 +48,6 @@ class CrashController extends DefaultViewController
    		
 		return new Response( '' );
 	}
-
-	/**
-	 * List the crashes
-	 * 
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	public function listAction()
-	{		 
-		$request = $this->getRequest();
-		
-		$crashesPerPage = $this->container->getParameter('crashes_per_page');
-		$currentPage = $request->query->get('page', 1);
-		
-		$doctrine = $this->getDoctrine()->getManager();
-		
-		$rep = $doctrine->getRepository('MLabsAcraServerBundle:Crash');
-		
-		// Count potential results
-		$crashNum = $rep->createBaseListQueryBuilder()
-				->select('count(c.id)')
-				->getQuery()
-				->getSingleScalarResult();
-		
-		// Get real results
-		$crashes = $rep->createBaseListQueryBuilder()
-				->select(null)
-				->setFirstResult(($currentPage-1)*$crashesPerPage)
-				->setMaxResults($crashesPerPage)
-				->getQuery()
-				->getResult();
-		
-		return $this->render('MLabsAcraServerBundle:Crash:list.html.twig', $this->getViewParameters(
-				array(
-						'crashes'   	=> $crashes,
-						'crashNum'		=> $crashNum,
-						'page'			=> $currentPage,
-						'totalPages'	=> $crashNum / $crashesPerPage
-					)));
-	}
-	
-    /**
-     * Show a crash details
-     */
-    public function detailsAction($id)
-    {
-        $doctrine = $this->getDoctrine()->getManager();
-        $crash = $doctrine->getRepository('MLabsAcraServerBundle:Crash')->find($id);
-
-        if (!$crash) {
-            throw $this->createNotFoundException('Unable to find crash.');
-        }
-
-        return $this->render('MLabsAcraServerBundle:Crash:details.html.twig', $this->getViewParameters(
-        		array(
-	            		'crash'      => $crash,
-	        		)));
-    }
     
     /**
      * Send an email notification about a new crash
@@ -171,27 +114,15 @@ class CrashController extends DefaultViewController
     	$crash->setStackTrace($requestData->get('STACK_TRACE', null));
     	$crash->setThreadDetails($requestData->get('THREAD_DETAILS', null));
     	$crash->setTotalMemSize($requestData->get('TOTAL_MEM_SIZE', null));
-    	$crash->setUserAppStartDate($requestData->get('USER_APP_START_DATE', null));
     	$crash->setUserComment($requestData->get('USER_COMMENT', null));
-    	$crash->setUserCrashDate($requestData->get('USER_CRASH_DATE', null));
     	$crash->setUserEmail($requestData->get('USER_EMAIL', null));
+    	
+    	$tmpDateTime = new \DateTime( $requestData->get('USER_APP_START_DATE', null) );
+    	$crash->setUserAppStartDate($tmpDateTime);
+
+    	$tmpDateTime = new \DateTime( $requestData->get('USER_CRASH_DATE', null) );
+    	$crash->setUserCrashDate($tmpDateTime);
     	
     	return $crash;
     }
-    
-    // --------------------------------------------------------------------------------------
-    // IAcraServerController implementation
-    
-    public function getApplications() 
-    {
-    	return $this->applications;	
-    }
-
-    public function setApplications($applications)
-    {
-    	$this->applications = $applications;
-    }
-    
-    /** @var array */
-    private $applications;
 }

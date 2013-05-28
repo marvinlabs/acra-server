@@ -1,10 +1,9 @@
 MarvinLabs\AcraServerBundle\Entity\Crash:
     crash{1..3000}:
         status: <crashStatus()>
-        issueId:
         reportId: <uuid>
-        appVersionCode: <numberBetween(1, 50)>
-        appVersionName: <appVersion()>
+        appVersionCode: <numberBetween(1, 20)>
+        appVersionName: <appVersion($appVersionCode)>
         packageName: <packageName()>
         filePath: 
         phoneModel: <model()>
@@ -20,8 +19,8 @@ MarvinLabs\AcraServerBundle\Entity\Crash:
         crashConfiguration:
         display:
         userComment:
-        userAppStartDate: <iso8601()>
-        userCrashDate: <iso8601()>
+        userAppStartDate: <dateTimeBetween("-1 years", "now")>
+        userCrashDate: <dateTimeBetween($userAppStartDate, "now")>
         dumpsysMeminfo:
         dropbox:
         logcat:

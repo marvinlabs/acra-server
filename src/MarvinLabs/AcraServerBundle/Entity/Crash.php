@@ -173,16 +173,16 @@ class Crash
     private $userComment;
 
     /**
-     * @var string
+     * @var datetime
      *
-     * @ORM\Column(name="user_app_start_date", type="text", nullable=true)
+     * @ORM\Column(name="user_app_start_date", type="datetime", nullable=true)
      */
     private $userAppStartDate;
 
     /**
-     * @var string
+     * @var datetime
      *
-     * @ORM\Column(name="user_crash_date", type="text", nullable=true)
+     * @ORM\Column(name="user_crash_date", type="datetime", nullable=true)
      */
     private $userCrashDate;
 
@@ -940,7 +940,7 @@ class Crash
     /**
      * Set userAppStartDate
      *
-     * @param string $userAppStartDate
+     * @param datetime $userAppStartDate
      * @return Crash
      */
     public function setUserAppStartDate($userAppStartDate)
@@ -953,7 +953,7 @@ class Crash
     /**
      * Get userAppStartDate
      *
-     * @return string 
+     * @return datetime 
      */
     public function getUserAppStartDate()
     {
@@ -963,7 +963,7 @@ class Crash
     /**
      * Set userCrashDate
      *
-     * @param string $userCrashDate
+     * @param datetime $userCrashDate
      * @return Crash
      */
     public function setUserCrashDate($userCrashDate)
@@ -976,7 +976,7 @@ class Crash
     /**
      * Get userCrashDate
      *
-     * @return string 
+     * @return datetime 
      */
     public function getUserCrashDate()
     {

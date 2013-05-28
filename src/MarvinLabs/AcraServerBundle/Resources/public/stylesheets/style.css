@@ -521,6 +521,8 @@ table {
   width: auto; }
   .graph-container .legend table tr {
     border: none; }
+    .graph-container .legend table tr:hover {
+      background: transparent; }
   .graph-container .legend table td {
     padding-bottom: 5px; }
   .graph-container .legend table td.legendColorBox {
@@ -530,6 +532,8 @@ table {
   margin: 2em 0;
   text-align: center;
   color: #999999; }
+.graph-container .pie-label {
+  color: white; }
 
 /************************************************************************************ */
 /** PAGINATION */
@@ -569,34 +573,37 @@ div.pagination {
 
 /************************************************************************************ */
 /** MENU */
-nav.main-navigation a {
-  display: inline-block;
-  width: 100%;
-  padding: 0.8em 1em;
-  color: #333333; }
-  nav.main-navigation a:hover {
-    color: white;
-    text-decoration: none; }
-nav.main-navigation ul li {
-  position: relative; }
-  nav.main-navigation ul li:hover {
-    background: #3366cc; }
-    nav.main-navigation ul li:hover a {
-      color: white; }
-    nav.main-navigation ul li:hover ul {
-      display: block; }
-nav.main-navigation ul ul {
-  display: none;
-  background: #3366cc;
-  border-radius: 0px;
-  padding: 0;
-  position: absolute;
-  top: 100%; }
-  nav.main-navigation ul ul li {
-    float: none;
-    width: 100%; }
-    nav.main-navigation ul ul li:hover {
-      background: #dd4b39; }
+nav.main-navigation {
+  position: relative;
+  z-index: 50000; }
+  nav.main-navigation a {
+    display: inline-block;
+    width: 100%;
+    padding: 0.8em 1em;
+    color: #333333; }
+    nav.main-navigation a:hover {
+      color: white;
+      text-decoration: none; }
+  nav.main-navigation ul li {
+    position: relative; }
+    nav.main-navigation ul li:hover {
+      background: #3366cc; }
+      nav.main-navigation ul li:hover a {
+        color: white; }
+      nav.main-navigation ul li:hover ul {
+        display: block; }
+  nav.main-navigation ul ul {
+    display: none;
+    background: #3366cc;
+    border-radius: 0px;
+    padding: 0;
+    position: absolute;
+    top: 100%; }
+    nav.main-navigation ul ul li {
+      float: none;
+      width: 100%; }
+      nav.main-navigation ul ul li:hover {
+        background: #dd4b39; }
 
 /************************************************************************************ */
 /** FOOTER */

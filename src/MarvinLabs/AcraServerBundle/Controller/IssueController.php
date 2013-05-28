@@ -21,11 +21,13 @@ class IssueController extends DefaultViewController
         $crashRepo = $doctrine->getRepository('MLabsAcraServerBundle:Crash');
 
 		$crashes = $crashRepo->findLatestIssues();
-		$applicationStatistics = $crashRepo->findApplicationStatistics();
+		$applicationStatistics = $crashRepo->findApplicationsStatistics();
+		$timeStatistics = $crashRepo->findApplicationsTimeStatistics();
         
 		return $this->render('MLabsAcraServerBundle:Issue:dashboard.html.twig',  $this->getViewParameters(
         		array(
 						'crashes'   				=> $crashes,
+        				'timeStatistics'			=> $timeStatistics,
         				'applicationStatistics'		=> $applicationStatistics
 					)));
 	}
@@ -38,18 +40,25 @@ class IssueController extends DefaultViewController
         $crashRepo = $doctrine->getRepository('MLabsAcraServerBundle:Crash');
 
 		$crashes = $crashRepo->findLatestIssues($packageName);
-
+		
+		$versionStatistics = $crashRepo->findApplicationVersionsStatistics($packageName);
+		$androidStatistics = $crashRepo->findApplicationAndroidVersionsStatistics($packageName);
+		$timeStatistics = $crashRepo->findApplicationTimeStatistics($packageName);
+		
 		return $this->render('MLabsAcraServerBundle:Issue:app_dashboard.html.twig',  $this->getViewParameters(
         		array(
-						'packageName'   	=> $packageName,
-						'crashes'   		=> $crashes
+						'packageName'   		=> $packageName,
+        				'versionStatistics'		=> $versionStatistics,
+        				'androidStatistics'		=> $androidStatistics,
+        				'timeStatistics'		=> $timeStatistics,
+						'crashes'   			=> $crashes
 					)));
 	}
 	
     /**
-     * Show a crash details
+     * Show an issue details
      */
-    public function detailsAction($id)
+    public function issueDetailsAction($id)
     {
         $doctrine = $this->getDoctrine()->getManager();
         $crash = $doctrine->getRepository('MLabsAcraServerBundle:Crash')->find($id);
@@ -61,6 +70,63 @@ class IssueController extends DefaultViewController
         return $this->render('MLabsAcraServerBundle:Issue:details.html.twig', $this->getViewParameters(
         		array(
 	            		'crash'		=> $crash
+	        		)));
+    }
+
+	/**
+	 * List the crashes corresponding to an issue
+	 * 
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function issueCrashesAction($issueId)
+	{		 
+		$request = $this->getRequest();
+		
+		$crashesPerPage = $this->container->getParameter('crashes_per_page');
+		$currentPage = $request->query->get('page', 1);
+		
+		$doctrine = $this->getDoctrine()->getManager();
+		
+		$rep = $doctrine->getRepository('MLabsAcraServerBundle:Crash');
+		
+		// Count potential results
+		$crashNum = $rep->createBaseListQueryBuilder()
+				->select('count(c.id)')
+				->getQuery()
+				->getSingleScalarResult();
+		
+		// Get real results
+		$crashes = $rep->createBaseListQueryBuilder()
+				->select(null)
+				->setFirstResult(($currentPage-1)*$crashesPerPage)
+				->setMaxResults($crashesPerPage)
+				->getQuery()
+				->getResult();
+		
+		return $this->render('MLabsAcraServerBundle:Crash:list.html.twig', $this->getViewParameters(
+				array(
+						'crashes'   	=> $crashes,
+						'crashNum'		=> $crashNum,
+						'page'			=> $currentPage,
+						'totalPages'	=> $crashNum / $crashesPerPage
+					)));
+	}
+	
+    /**
+     * Show a crash details
+     */
+    public function crashDetailsAction($id)
+    {
+        $doctrine = $this->getDoctrine()->getManager();
+        $crash = $doctrine->getRepository('MLabsAcraServerBundle:Crash')->find($id);
+
+        if (!$crash) {
+            throw $this->createNotFoundException('Unable to find crash.');
+        }
+
+        return $this->render('MLabsAcraServerBundle:Crash:details.html.twig', $this->getViewParameters(
+        		array(
+	            		'crash'      => $crash,
 	        		)));
     }
     

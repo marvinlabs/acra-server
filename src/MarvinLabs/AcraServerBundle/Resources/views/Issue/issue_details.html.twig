@@ -1,0 +1,273 @@
+{% extends 'MLabsAcraServerBundle::layout.html.twig' %}
+
+{% import 'MLabsAcraServerBundle::cards.html.twig' as cards %}
+{% import _self as fields %}
+
+
+{% macro echo(title, value, test, value_wrapper, outer_tag) %}
+	{% if test | default(value) %}	
+		<{{ outer_tag | default('li') }} class="field">
+			<strong class="label">{{ title }}</strong>: <{{value_wrapper | default('span')}} class="value">{{ value }}</{{value_wrapper | default('span')}}>
+		</{{ outer_tag | default('li') }}>
+	{% endif %}	
+{% endmacro %}
+
+
+{% block main %}
+
+
+<section class="card-container crash-header">
+	<h2>Crash #{{ crash.id }}</h2>
+	
+	<ul>
+		{{ fields.echo('Package', crash.packageName) }}
+		{{ fields.echo('Version', "#{ crash.appVersionName } ~ #{ crash.appVersionCode }", crash.appVersionName) }}
+		{{ fields.echo('Submitted', "#{crash.createdAt | date('Y-m-d H:i:s')} (UTC)", crash.createdAt) }}
+		{{ fields.echo('Status', crash.statusAsString) }}
+		{{ fields.echo('User comment', crash.userComment) }}
+		{{ fields.echo('User email', crash.userEmail) }}
+		{{ fields.echo('App start', crash.userAppStartDate) }}
+		{{ fields.echo('App crash', crash.userCrashDate) }}
+	</ul>
+</section>
+
+<section class="crash-header">
+	<div id="statistics-tabs" class="tab-container">				
+		<ul class="nav">
+	    	<li class="tab first"><a href="#distribution" class="current">Distribution</a></li>
+            <li class="tab last"><a href="#evolution">Evolution</a></li>
+	    </ul>
+		
+	    <div class="content">		
+			<div id="distribution">
+				<div id="crash-app-versions" class="graph-container half-width">
+					<div class="graph"></div>
+					<h4 class="title">Application versions</h4>
+				</div>
+				<div id="crash-android-versions" class="graph-container half-width">
+					<div class="graph"></div>
+					<h4 class="title">Android versions</h4>
+				</div>
+			</div>
+			<div id="evolution">
+				<div id="crash-in-time" class="graph-container full-width">
+					<div class="graph"></div>
+					<h4 class="title">Number of crashes with time</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="crash-details">
+	<div id="details-tabs" class="tab-container">				
+		<ul class="nav">
+	    	<li class="tab first"><a href="#stacktrace" class="current">Stacktrace</a></li>
+            <li class="tab"><a href="#device">Device</a></li>
+            <li class="tab"><a href="#android">Android</a></li>
+            <li class="tab"><a href="#logs">Logs</a></li>
+            <li class="tab"><a href="#settings">Settings</a></li>
+            <li class="tab"><a href="#configuration">Configuration</a></li>
+            <li class="tab last"><a href="#other">Other</a></li>
+	    </ul>
+		
+	    <div class="tab-content">		
+			<ul id="stacktrace">
+				{{ fields.echo('Summary', crash.shortStackTrace, crash.shortStackTrace, 'pre') }}
+				{{ fields.echo('Full', crash.stackTrace, crash.stackTrace, 'pre') }}
+			</ul>
+			 
+			<ul id="device" class="hide">
+				{{ fields.echo('Model', "#{ crash.brand }, #{ crash.phoneModel }", crash.brand) }}
+				{{ fields.echo('Product code', crash.product) }}
+				{{ fields.echo('Total memory', crash.totalMemSize | bfos_format_bytes, crash.totalMemSize) }}
+				{{ fields.echo('Available memory', crash.availableMemSize | bfos_format_bytes, crash.availableMemSize) }}
+				{{ fields.echo('Display', crash.display, crash.display, 'pre') }}
+				{{ fields.echo('Features', crash.deviceFeatures, crash.deviceFeatures, 'pre') }}
+				{{ fields.echo('Device ID', crash.deviceId, crash.deviceId, 'pre') }}
+			</ul>
+			
+			<ul id="android" class="hide">
+				{{ fields.echo('Version', crash.androidVersion) }}
+				{{ fields.echo('Build details', crash.build, crash.build, 'pre') }}
+			</ul>	
+			
+			<ul id="logs" class="hide">
+				{{ fields.echo('logcat', crash.logcat, crash.logcat, 'pre') }}
+				{{ fields.echo('eventslog', crash.eventslog, crash.eventslog, 'pre') }}
+				{{ fields.echo('radiolog', crash.radiolog, crash.radiolog, 'pre') }}
+				{{ fields.echo('applicationLog', crash.applicationLog, crash.applicationLog, 'pre') }}
+			</ul>	
+			
+			<ul id="settings" class="hide">
+				{{ fields.echo('Global', crash.settingsGlobal, crash.settingsGlobal, 'pre') }}
+				{{ fields.echo('System', crash.settingsSystem, crash.settingsSystem, 'pre') }}
+				{{ fields.echo('Secure', crash.settingsSecure, crash.settingsSecure, 'pre') }}
+			</ul>
+			
+			<ul id="configuration" class="hide">
+				{{ fields.echo('initialConfiguration', crash.initialConfiguration, crash.initialConfiguration, 'pre') }}
+				{{ fields.echo('crashConfiguration', crash.crashConfiguration, crash.crashConfiguration, 'pre') }}
+			</ul>	
+			
+			<ul id="other" class="hide">
+				{{ fields.echo('File path', crash.filePath) }}
+				{{ fields.echo('customData', crash.customData, crash.customData, 'pre') }}
+				{{ fields.echo('dumpsysMeminfo', crash.dumpsysMeminfo, crash.dumpsysMeminfo, 'pre') }}
+				{{ fields.echo('dropbox', crash.dropbox, crash.dropbox, 'pre') }}
+				{{ fields.echo('isSilent', crash.isSilent, crash.isSilent, 'pre') }}
+				{{ fields.echo('installationId', crash.installationId, crash.installationId, 'pre') }}
+				{{ fields.echo('environment', crash.environment, crash.environment, 'pre') }}
+				{{ fields.echo('sharedPreferences', crash.sharedPreferences, crash.sharedPreferences, 'pre') }}
+				{{ fields.echo('mediaCodecList', crash.mediaCodecList, crash.mediaCodecList, 'pre') }}
+				{{ fields.echo('threadDetails', crash.threadDetails, crash.threadDetails, 'pre') }}
+			</ul>	 
+	    </div>
+	</div> 
+</section>
+
+{% endblock %}
+
+{% block javascripts %}
+    // The data for the charts
+    var pieChartOptions = { 
+   			series: {
+	        	pie: {
+	            	innerRadius: 0.5,
+	            	show: true
+	        	}
+	    	}
+	    };
+	    
+    var lineGraphOptions = { 
+			xaxis: {
+				mode: "time",
+				minTickSize: [1, "day"],
+				min: 1014937200000,
+				max: 1199142000000,
+				twelveHourClock: false
+			}
+	    };
+	    
+    var appVersionsData = [
+		    {
+			    label: "1.0",
+    			data: 10
+			},
+		    {
+			    label: "2.0",
+    			data: 40
+			},
+		    {
+			    label: "3.0",
+    			data: 20
+			},
+		    {
+			    label: "4.0",
+    			data: 30
+			},
+		];
+	    
+    var androidVersionsData = [
+		    {
+			    label: "2.2",
+    			data: 60
+			},
+		    {
+			    label: "2.3",
+    			data: 20
+			},
+		    {
+			    label: "4.1",
+    			data: 10
+			},
+		    {
+			    label: "4.2.1",
+    			data: 5
+			},
+		    {
+			    label: "4.2.2",
+    			data: 5
+			},
+		];
+	    
+    var timeData = [[
+		    [1014937200000, 373.81], [1017612000000, 374.93], [1020204000000, 375.58], 
+		    [1022882400000, 375.44], [1025474400000, 373.86], [1028152800000, 371.77], 
+		    [1030831200000, 370.73], [1033423200000, 370.50], [1036105200000, 372.18], 
+		    [1038697200000, 373.70], [1041375600000, 374.92], [1044054000000, 375.62], 
+		    [1046473200000, 376.51], [1049148000000, 377.75], [1051740000000, 378.54], 
+		    [1054418400000, 378.20], [1057010400000, 376.68], [1059688800000, 374.43], 
+		    [1062367200000, 373.11], [1064959200000, 373.10], [1067641200000, 374.77], 
+		    [1070233200000, 375.97], [1072911600000, 377.03], [1075590000000, 377.87], 
+		    [1078095600000, 378.88], [1080770400000, 380.42], [1083362400000, 380.62], 
+		    [1086040800000, 379.70], [1088632800000, 377.43], [1091311200000, 376.32], 
+		    [1093989600000, 374.19], [1096581600000, 374.47], [1099263600000, 376.15], 
+		    [1101855600000, 377.51], [1104534000000, 378.43], [1107212400000, 379.70], 
+		    [1109631600000, 380.92], [1112306400000, 382.18], [1114898400000, 382.45], 
+		    [1117576800000, 382.14], [1120168800000, 380.60], [1122847200000, 378.64], 
+		    [1125525600000, 376.73], [1128117600000, 376.84], [1130799600000, 378.29], 
+		    [1133391600000, 380.06], [1136070000000, 381.40], [1138748400000, 382.20], 
+		    [1141167600000, 382.66], [1143842400000, 384.69], [1146434400000, 384.94], 
+		    [1149112800000, 384.01], [1151704800000, 382.14], [1154383200000, 380.31], 
+		    [1157061600000, 378.81], [1159653600000, 379.03], [1162335600000, 380.17], 
+		    [1164927600000, 381.85], [1167606000000, 382.94], [1170284400000, 383.86], 
+		    [1172703600000, 384.49], [1175378400000, 386.37], [1177970400000, 386.54], 
+		    [1180648800000, 385.98], [1183240800000, 384.36], [1185919200000, 381.85], 
+		    [1188597600000, 380.74], [1191189600000, 381.15], [1193871600000, 382.38], 
+		    [1196463600000, 383.94], [1199142000000, 385.44]
+		]];
+    
+    function redrawActiveTabCharts($, onlyActiveTab) {
+   		if (typeof(onlyActiveTab)==='undefined') onlyActiveTab = true;
+    	
+    	if (onlyActiveTab) {
+    		var activeTab = $(".tab-container").tabs( "option", "active" );
+	       	if (activeTab==0) {	
+			    $.plot("#crash-app-versions .graph", appVersionsData, pieChartOptions);
+			    $.plot("#crash-android-versions .graph", androidVersionsData, pieChartOptions);
+	       	} else if (activeTab==1) {
+				$.plot("#crash-in-time .graph", timeData, lineGraphOptions);
+	       	}	
+       	} else {
+		    $.plot("#crash-app-versions .graph", appVersionsData, pieChartOptions);
+		    $.plot("#crash-android-versions .graph", androidVersionsData, pieChartOptions);
+			$.plot("#crash-in-time .graph", timeData, lineGraphOptions);
+       	}
+    }
+    
+    $(document).ready(function(){ 	    
+	    // Tab handling
+	    var globalTabOptions = {
+		        hide: { effect: "fade", duration: 300 },
+		        show: { effect: "fade", duration: 300 },
+		        
+		       	// Following is to fix the page jump
+		       	// see: http://stackoverflow.com/questions/243794/jquery-ui-tabs-causing-screen-to-jump
+				select: function(event, ui) {
+					jQuery(this).css('height', jQuery(this).height());
+					jQuery(this).css('overflow', 'hidden');
+				},
+				show: function(event, ui) {
+					jQuery(this).css('height', 'auto');
+					jQuery(this).css('overflow', 'visible');
+				}
+			};
+		var graphTabOptions = $.extend(globalTabOptions, {
+		        activate: function( event, ui ) {
+		        	redrawActiveTabCharts($);	
+		        },
+		        create: function( event, ui ) {
+		        	redrawActiveTabCharts($, false);	
+		        }
+	        });
+	    $("#details-tabs").tabs(globalTabOptions);
+	    $("#statistics-tabs").tabs(graphTabOptions);
+	    
+	    // Redraw charts when window is resized
+	    $(window).resize(function() {
+	    	redrawActiveTabCharts($);	
+		});
+	});
+{% endblock %}
+

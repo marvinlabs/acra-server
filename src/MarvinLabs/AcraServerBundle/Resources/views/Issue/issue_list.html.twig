@@ -1,0 +1,52 @@
+{% extends 'MLabsAcraServerBundle::layout.html.twig' %}
+
+{% block main %}
+
+<section class="crash-list">
+	<h2>{{ crashNum }} crashes</h2>
+
+{% if crashes %}
+	<table>
+		<thead>
+			{% block table_headers %}
+			<tr>
+				<th>Id</th>
+				<th>Created</th>
+				<th>Package</th>
+				<th>App version</th>
+				<th>Android version</th>
+				<th></th>
+			</tr>
+			{% endblock %}
+		</thead>
+		<tbody>
+		{% for c in crashes %}
+			<tr>
+				<td class="id">#{{ c.id }}</td>
+				<td class="created-at">{{ c.userCrashDate | date('d/m/Y H:i') }} (UTC)</td>
+				<td class="package-name">{{ c.packageName }}</td>
+				<td class="app-version">{{ c.appVersionName }}</td>
+				<td class="android-version">{{ c.androidVersion }}</td>
+				<td class="action-link"><a href="{{ path('_crash_details', {'id': c.id}) }}" class="primary-button">Details</a></td>
+			</tr>
+		{% endfor %}
+		</tbody>
+		<tfoot>
+			{{ block('table_headers') }}
+		</tfoot>
+	</table>
+	
+	{% include 'MLabsAcraServerBundle::pagination.html.twig' with {
+	    currentFilters: { },
+	    currentPage: page,
+	    paginationPath: "_crash_list",
+	    lastPage: totalPages,
+	    showAlwaysFirstAndLast: false
+	} only %}
+	
+{% else %}
+	<p>No crashes here</p>
+{% endif %}
+</section>
+
+{% endblock %}

@@ -6,7 +6,7 @@
 		<div id="statistics-tabs" class="tab-container">				
 			<ul class="nav">
 		    	<li class="tab first"><a href="#distribution" class="current">Distribution</a></li>
-<!-- 	            <li class="tab last"><a href="#evolution">Evolution</a></li>  -->
+ 	            <li class="tab last"><a href="#evolution-num">Evolution</a></li>
 		    </ul>
 			
 		    <div class="content">		
@@ -20,14 +20,12 @@
 						<h4 class="title">Crashes per application</h4>
 					</div>
 				</div>
-<!-- 
-				<div id="evolution">
+				<div id="evolution-num">
 					<div id="crash-in-time" class="graph-container full-width">
 						<div class="graph"></div>
 						<h4 class="title">Number of crashes with time</h4>
 					</div>
 				</div>
- -->				
 			</div>
 		</div>
 	</section>
@@ -63,7 +61,7 @@
 					
 					<tr>
 						<td class="package-name">{{ c.packageName }}</td>
-						<td class="created-at">{{ c.latestCrashDate | date('d/m/Y H:i:s') }} (UTC)</td>
+						<td class="created-at">{{ c.latestCrashDate | date('d/m/Y H:i') }} (UTC)</td>
 						<td class="crash-num">{{ c.crashNum }}</td>
 						<td class="app-version" title="{{ appVersions|e }}">{{ shortAppVersions }}</td>
 						<td class="android-version" title="{{ androidVersions|e }}">{{ shortAndroidVersions }}</td>
@@ -87,10 +85,23 @@
     var pieChartOptions = { 
    			series: {
 	        	pie: {
-	            	innerRadius: 0.5,
-	            	show: true
+	            	innerRadius: 0.4,
+	            	show: true,
 	        	}
-	    	}
+	    	},
+	    };
+	    
+	{% set minTime = timeStatistics | first %}
+	{% set maxTime = timeStatistics | last %}
+    var lineGraphOptions = { 
+			xaxis: {
+				mode: "time",
+				min: {{ minTime.crashDate | date('U') }},
+				max: {{ maxTime.crashDate | date('U') }},
+				twelveHourClock: false,
+				minTickSize: [1, "day"],
+				timeformat: "%Y/%m/%d"
+			}
 	    };
 	    
     var issuesPerAppData = [
@@ -110,6 +121,13 @@
 			},
 	{% endfor %}
 		];
+	    
+    var timeData = [[
+    {% for s in timeStatistics %}
+    // {{ s.crashDate }}
+		    [{{ s.crashDate | date('U') }}, {{ s.crashNum }}],
+	{% endfor %}
+		]];
     
     function redrawActiveTabCharts($, onlyActiveTab) {
    		if (typeof(onlyActiveTab)==='undefined') onlyActiveTab = true;
@@ -119,10 +137,13 @@
 	       	if (activeTab==0) {	
 			    $.plot("#issues-per-app .graph", issuesPerAppData, pieChartOptions);
 			    $.plot("#crashes-per-app .graph", crashesPerAppData, pieChartOptions);
+	       	} else if (activeTab==1) {	
+			    $.plot("#crash-in-time .graph", timeData, lineGraphOptions);
 	       	}
        	} else {
 			$.plot("#issues-per-app .graph", issuesPerAppData, pieChartOptions);
 			$.plot("#crashes-per-app .graph", crashesPerAppData, pieChartOptions);
+			$.plot("#crash-in-time .graph", timeData, lineGraphOptions);
        	}
     }
     

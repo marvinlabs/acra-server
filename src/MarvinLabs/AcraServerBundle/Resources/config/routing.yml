@@ -3,31 +3,40 @@ _crash_add:
     defaults: { _controller: MLabsAcraServerBundle:Crash:add }
     methods:  [POST]
 
-_crash_list:
-    pattern:  /crash/list
-    defaults: { _controller: MLabsAcraServerBundle:Crash:list }
-    methods:  [GET]
-
 _crash_details:
     pattern:  /crash/details/{id}
-    defaults: { _controller: MLabsAcraServerBundle:Crash:details }
+    defaults: { _controller: MLabsAcraServerBundle:Issue:crashDetails }
     methods:  [GET]
     requirements:
         id: \d+
 
 _issue_details:
-    pattern:  /issue/{id}
-    defaults: { _controller: MLabsAcraServerBundle:Issue:details }
+    pattern:  /issue/details/{id}
+    defaults: { _controller: MLabsAcraServerBundle:Issue:issueDetails }
     methods:  [GET]
     requirements:
         id: "[0-9a-fA-F]{32}"
+
+_crash_list:
+    pattern:  /crash/list/{issueId}
+    defaults: { _controller: MLabsAcraServerBundle:Issue:issueCrashes }
+    methods:  [GET]
+    requirements:
+        issueId: "[0-9a-fA-F]{32}"
+
+_issue_list:
+    pattern:  /issue/list/{packageName}
+    defaults: { _controller: MLabsAcraServerBundle:Crash:appIssues }
+    methods:  [GET]
+    requirements:
+        packageName: "[0-9a-zA-Z\.]+"
 
 _app_dashboard:
     pattern:  /app/{packageName}
     defaults: { _controller: MLabsAcraServerBundle:Issue:appDashboard }
     methods:  [GET]
     requirements:
-        id: "[0-9a-fA-F\.]+"
+        packageName: "[0-9a-zA-Z\.]+"
 
 _main_dashboard:
     pattern:  /

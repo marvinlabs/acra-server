@@ -58,6 +58,9 @@ doctrine:
         dql:
             string_functions:
                 group_concat: DoctrineExtensions\Query\MySql\GroupConcat
+                year:         DoctrineExtensions\Query\MySql\Year
+                month:        DoctrineExtensions\Query\MySql\Month
+                day:          DoctrineExtensions\Query\MySql\Day
 #                    numeric_functions:
 #                    datetime_functions:
 

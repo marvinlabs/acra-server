@@ -4,10 +4,34 @@
 	<section>
 		<h1>{{ packageName }}</h1>
 	</section>
-	
-	<!-- Pie - Crashes per app version -->
 
-	<!-- Pie - Crashes per android version -->
+	<section class="dashboard-header">
+		<div id="statistics-tabs" class="tab-container">				
+			<ul class="nav">
+		    	<li class="tab first"><a href="#distribution" class="current">Distribution</a></li>
+ 	            <li class="tab last"><a href="#evolution">Evolution</a></li>
+		    </ul>
+			
+		    <div class="content">		
+				<div id="distribution">
+					<div id="issues-per-version" class="graph-container half-width">
+						<div class="graph"></div>
+						<h4 class="title">New crashes per application version</h4>
+					</div>
+					<div id="issues-per-android" class="graph-container half-width">
+						<div class="graph"></div>
+						<h4 class="title">New crashes per Android version</h4>
+					</div>
+				</div> 
+				<div id="evolution">
+					<div id="crash-in-time" class="graph-container full-width">
+						<div class="graph"></div>
+						<h4 class="title">Number of crashes with time</h4>
+					</div>
+				</div>				
+			</div>
+		</div>
+	</section>
 
 	<!-- Line - Crashes per version per date -->
 
@@ -40,7 +64,7 @@
 					{% set androidVersions = androidVersions|join(', ') %} 
 					
 					<tr>
-						<td class="created-at">{{ c.latestCrashDate | date('d/m/Y H:i:s') }} (UTC)</td>
+						<td class="created-at">{{ c.latestCrashDate | date('d/m/Y H:i') }} (UTC)</td>
 						<td class="crash-num">{{ c.crashNum }}</td>
 						<td class="app-version" title="{{ appVersions|e }}">{{ shortAppVersions }}</td>
 						<td class="android-version" title="{{ androidVersions|e }}">{{ shortAndroidVersions }}</td>
@@ -57,4 +81,105 @@
 		{% endif %}		
 	</section>
 
+{% endblock %}
+
+{% block javascripts %}
+    // The data for the charts
+    var pieChartOptions = { 
+   			series: {
+	        	pie: {
+	            	innerRadius: 0.4,
+	            	show: true,
+	        	}
+	    	},
+	    };
+	    
+	{% set minTime = timeStatistics | first %}
+	{% set maxTime = timeStatistics | last %}
+    var lineGraphOptions = { 
+			xaxis: {
+				mode: "time",
+				minTickSize: [1, "day"],
+				min: {{ minTime.crashDate | date('U') }},
+				max: {{ maxTime.crashDate | date('U') }},
+				twelveHourClock: false,
+				timeformat: "%Y/%m/%d"
+			}
+	    };
+	    
+    var issuesPerVersionData = [
+    {% for s in versionStatistics %}
+		    {
+			    label: "{{ s.appVersionName }} ~ {{ s.appVersionCode }}",
+    			data: {{ s.issueNum }}
+			},
+	{% endfor %}
+		];
+		
+    var issuesPerAndroidData = [
+    {% for s in androidStatistics %}
+		    {
+			    label: "{{ s.androidVersion }}",
+    			data: {{ s.crashNum }}
+			},
+	{% endfor %}
+		];
+	    
+    var timeData = [[
+    {% for s in timeStatistics %}
+    // {{ s.crashDate }}
+		    [{{ s.crashDate | date('U') }}, {{ s.crashNum }}],
+	{% endfor %}
+		]];
+    
+    function redrawActiveTabCharts($, onlyActiveTab) {
+   		if (typeof(onlyActiveTab)==='undefined') onlyActiveTab = true;
+    	
+    	if (onlyActiveTab) {
+    		var activeTab = $(".tab-container").tabs( "option", "active" );
+	       	if (activeTab==0) {	
+			    $.plot("#issues-per-version .graph", issuesPerVersionData, pieChartOptions);
+			    $.plot("#issues-per-android .graph", issuesPerAndroidData, pieChartOptions);
+	       	} else if (activeTab==1) {	
+			    $.plot("#crash-in-time .graph", timeData, lineGraphOptions);
+	       	}
+       	} else {
+			$.plot("#issues-per-version .graph", issuesPerVersionData, pieChartOptions);
+			$.plot("#issues-per-android .graph", issuesPerAndroidData, pieChartOptions);
+			$.plot("#crash-in-time .graph", timeData, lineGraphOptions);
+       	}
+    }
+    
+    $(document).ready(function(){ 	    
+	    // Tab handling
+	    var globalTabOptions = {
+		        hide: { effect: "fade", duration: 300 },
+		        show: { effect: "fade", duration: 300 },
+		        
+		       	// Following is to fix the page jump
+		       	// see: http://stackoverflow.com/questions/243794/jquery-ui-tabs-causing-screen-to-jump
+				select: function(event, ui) {
+					jQuery(this).css('height', jQuery(this).height());
+					jQuery(this).css('overflow', 'hidden');
+				},
+				show: function(event, ui) {
+					jQuery(this).css('height', 'auto');
+					jQuery(this).css('overflow', 'visible');
+				}
+			};
+		var graphTabOptions = $.extend(globalTabOptions, {
+		        activate: function( event, ui ) {
+		        	redrawActiveTabCharts($);	
+		        },
+		        create: function( event, ui ) {
+		        	redrawActiveTabCharts($, false);	
+		        }
+	        });
+	    $("#statistics-tabs").tabs(graphTabOptions);
+	    
+	    // Redraw charts when window is resized
+	    $(window).resize(function() {
+	    	redrawActiveTabCharts($);	
+		});
+	});
 {% endblock %}
