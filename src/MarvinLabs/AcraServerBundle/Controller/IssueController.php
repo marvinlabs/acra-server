@@ -54,56 +54,17 @@ class IssueController extends DefaultViewController
 						'crashes'   			=> $crashes
 					)));
 	}
-
-	/**
-	 * List the crashes corresponding to an issue
-	 * 
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	public function issueCrashesAction($issueId)
-	{		 
-		$request = $this->getRequest();
-		
-		$crashesPerPage = $this->container->getParameter('crashes_per_page');
-		$currentPage = $request->query->get('page', 1);
-		
-		$doctrine = $this->getDoctrine()->getManager();
-		
-		$rep = $doctrine->getRepository('MLabsAcraServerBundle:Crash');
-		
-		// Count potential results
-		$crashNum = $rep->createBaseListQueryBuilder()
-				->select('count(c.id)')
-				->getQuery()
-				->getSingleScalarResult();
-		
-		// Get real results
-		$crashes = $rep->createBaseListQueryBuilder()
-				->select(null)
-				->setFirstResult(($currentPage-1)*$crashesPerPage)
-				->setMaxResults($crashesPerPage)
-				->getQuery()
-				->getResult();
-		
-		return $this->render('MLabsAcraServerBundle:Crash:list.html.twig', $this->getViewParameters(
-				array(
-						'crashes'   	=> $crashes,
-						'crashNum'		=> $crashNum,
-						'page'			=> $currentPage,
-						'totalPages'	=> $crashNum / $crashesPerPage
-					)));
-	}
 	
     /**
      * Show an issue details
      */
-    public function issueDetailsAction($id)
+    public function issueDetailsAction($issueId)
     {
         $doctrine = $this->getDoctrine()->getManager();
         $crashRepo = $doctrine->getRepository('MLabsAcraServerBundle:Crash');
         
-        $issue = $crashRepo->newIssueDetailsQuery($id)->getSingleResult();
-        $crashes = $crashRepo->newIssueCrashesQuery($id)->setMaxResults(15)->getResult();
+        $issue = $crashRepo->newIssueDetailsQuery($issueId)->getSingleResult();
+        $crashes = $crashRepo->newIssueCrashesQuery($issueId)->setMaxResults(15)->getResult();
 
         if (!$issue) {
             throw $this->createNotFoundException('Unable to find issue.');

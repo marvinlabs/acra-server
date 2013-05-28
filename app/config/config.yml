@@ -57,10 +57,10 @@ doctrine:
         auto_mapping: true
         dql:
             string_functions:
-                group_concat: DoctrineExtensions\Query\MySql\GroupConcat
-                year:         DoctrineExtensions\Query\MySql\Year
-                month:        DoctrineExtensions\Query\MySql\Month
-                day:          DoctrineExtensions\Query\MySql\Day
+                group_concat: DoctrineExtensions\Query\Mysql\GroupConcat
+                year:         DoctrineExtensions\Query\Mysql\Year
+                month:        DoctrineExtensions\Query\Mysql\Month
+                day:          DoctrineExtensions\Query\Mysql\Day
 #                    numeric_functions:
 #                    datetime_functions:
 

@@ -65,7 +65,7 @@
 						<td class="crash-num">{{ c.crashNum }}</td>
 						<td class="app-version" title="{{ appVersions|e }}">{{ shortAppVersions }}</td>
 						<td class="android-version" title="{{ androidVersions|e }}">{{ shortAndroidVersions }}</td>
-						<td class="action-link"><a href="{{ path('_issue_details', {'id': c.issueId}) }}" class="primary-button">Details</a></td>
+						<td class="action-link"><a href="{{ path('_issue_details', {'issueId': c.issueId}) }}" class="primary-button">Details</a></td>
 					</tr>
 				{% endfor %}
 				</tbody>

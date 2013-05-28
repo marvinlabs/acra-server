@@ -11,35 +11,21 @@ _crash_details:
         id: \d+
 
 _issue_details:
-    pattern:  /issue/details/{id}
-    defaults: { _controller: MLabsAcraServerBundle:Issue:issueDetails }
-    methods:  [GET]
-    requirements:
-        id: "[0-9a-fA-F]{32}"
-
-_crash_list:
-    pattern:  /crash/list/{issueId}
-    defaults: { _controller: MLabsAcraServerBundle:Issue:issueCrashes }
+    pattern:  /issue/details/{issueId}
+    defaults: { _controller: MLabsAcraServerBundle:Issue:issueDetails, issueId: a }
     methods:  [GET]
     requirements:
         issueId: "[0-9a-fA-F]{32}"
 
-_issue_list:
-    pattern:  /issue/list/{packageName}
-    defaults: { _controller: MLabsAcraServerBundle:Crash:appIssues }
-    methods:  [GET]
-    requirements:
-        packageName: "[0-9a-zA-Z\.]+"
-
 _app_dashboard:
-    pattern:  /app/{packageName}
-    defaults: { _controller: MLabsAcraServerBundle:Issue:appDashboard }
+    pattern:  /application/{packageName}
+    defaults: { _controller: MLabsAcraServerBundle:Issue:appDashboard, packageName: com.example.myapp }
     methods:  [GET]
     requirements:
         packageName: "[0-9a-zA-Z\.]+"
 
 _main_dashboard:
-    pattern:  /
+    pattern:  /dashboard
     defaults: { _controller: MLabsAcraServerBundle:Issue:dashboard }
     methods:  [GET]
 
