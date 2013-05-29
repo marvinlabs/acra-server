@@ -13,6 +13,7 @@ A server to collect crash data of your android applications
 ## Installation
 
 The app can be installed on your server using two methods: 
+
 1. by uploading a complete zip file and manually creating the database (requires FTP and database access)
 2. by installing the Symfony framework first and then this bundle (requires command line access to git, php and composer on your server)
 
