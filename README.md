@@ -10,6 +10,10 @@ A server to collect crash data of your android applications
 - Dashboard for all applications with some statistics
 - Dashboard for a single application with some statistics
 
+## Demo
+
+There is a demo server running (with very few crashes halas, we are looking for crash data to feed this DB): http://acra-server-demo.marvinlabs.com/dashboard
+
 ## Installation
 
 The app can be installed on your server using two methods: 
