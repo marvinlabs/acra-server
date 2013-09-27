@@ -3,7 +3,7 @@
 namespace MarvinLabs\AcraServerBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 
 class TablePrefixSubscriber implements EventSubscriber
 {

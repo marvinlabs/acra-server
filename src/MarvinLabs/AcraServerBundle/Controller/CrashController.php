@@ -43,7 +43,7 @@ class CrashController extends Controller
 				$this->get('twig'),
 				$this->container->getParameter('notifications_from'),
 				$this->container->getParameter('notifications_to'),
-				$crashes[0]
+				$crash
 			);
    		
 		return new Response( '' );
