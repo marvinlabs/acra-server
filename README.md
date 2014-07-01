@@ -27,16 +27,13 @@ This app is nothing more than a regular Symfony bundle and can be installed as s
 - Edit `app/config/parameters.yml` to enter the connection details to your database server and the email addresses for notifications
 - Run the php commands to setup the project:
 
-// If the DB is not created
-
+    // If the DB is not created
     php app/console doctrine:database:create --env=prod 
     
-// Create the DB tables
-
+    // Create the DB tables
     php app/console doctrine:schema:create --env=prod
     
-// Prepare the CSS and JS
-
+    // Prepare the CSS and JS
     php app/console assets:install --env=prod --no-debug
     php app/console assetic:dump --env=prod --no-debug
 
